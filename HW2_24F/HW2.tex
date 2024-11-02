@@ -79,23 +79,27 @@
 	\section*{Solution}
 
 \subsection*{Part (a)}
-We want to show that the first column of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximizes $\|\mX \bm{\phi}\|_2^2$ subject to $\|\bm{\phi}\|_2 = 1$.
+Show that the first column of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximizes $\|\mX \bm{\phi}\|_2^2$ subject to $\|\bm{\phi}\|_2 = 1$.
 
 \textbf{Proof:}
 
-1. We aim to maximize
-   \[
-   \|\mX \bm{\phi}\|_2^2 = \bm{\phi}^T \mX^T \mX \bm{\phi}
-   \]
-   subject to $\|\bm{\phi}\|_2 = 1$.
+The variance of the data when projected onto a unit vector $\bm{\phi}$ is
+	\[
+	\|\mX \bm{\phi}\|_2^2 = \bm{\phi}^T \mX^T \mX \bm{\phi} \hspace*{10pt} \text{subject to} \hspace*{10pt}\|\bm{\phi}\|_2 = 1
+	\]
 
-2. Since $\mX^T \mX$ is a symmetric, positive semi-definite matrix, we can decompose it as
-   \[
-   \mX^T \mX = \mU \mS \mU^T
-   \]
-   where $\mU$ is an orthogonal matrix (i.e., $\mU^T \mU = \mI$) and $\mS$ is a diagonal matrix containing the singular values $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n \geq 0$.
 
-3. Substituting the decomposition into the objective function, we get
+$\mX^T \mX$ is a symmetric matrix, decompose it as
+   \[
+   \mX^T \mX = \mU \mS \mU^T,
+   \]
+   \hspace*{15pt}where $\mU$ is an orthogonal matrix and $\mS$ is a diagonal matrix containing the singular values
+   \[
+   \hspace*{10pt}\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n \geq 0.
+   \]
+   
+
+Substituting into the objective function
    \[
    \bm{\phi}^T \mX^T \mX \bm{\phi} = \bm{\phi}^T \mU \mS \mU^T \bm{\phi}.
    \]
@@ -103,58 +107,65 @@ We want to show that the first column of $\mU$, where $[\mU, \mS] = \text{svd}(\
    \[
    \bm{\phi}^T \mU \mS \mU^T \bm{\phi} = \bm{\psi}^T \mS \bm{\psi}.
    \]
-   
-4. The quantity $\bm{\psi}^T \mS \bm{\psi}$ is maximized when $\bm{\psi}$ aligns with the eigenvector corresponding to the largest singular value $\sigma_1$. Therefore, the maximum is achieved when $\bm{\phi} = \mU(:, 1)$.
 
-5. If we consider another vector $\hat{\bm{\phi}} = 0.8 \mU(:, 1) + 0.6 \mU(:, 2)$ that satisfies $\|\hat{\bm{\phi}}\|_2 = 1$, the contribution from $\sigma_2$ will reduce the value of $\bm{\phi}^T \mX^T \mX \bm{\phi}$ since $\sigma_1 \geq \sigma_2$. Hence, $\mU(:, 1)$ is the optimal choice.
+The quantity $\bm{\psi}^T \mS \bm{\psi}$ is maximized when $\bm{\psi}$ aligns with the eigenvector corresponding to the largest singular value $\sigma_1$. Therefore, the maximum is achieved when $\bm{\phi} = \mU(:, 1)$.
+
+$\hat{\bm{\phi}} = 0.8 \mU(:, 1) + 0.6 \mU(:, 2)$ satisfies $\|\hat{\bm{\phi}}\|_2 = 1$, the contribution from $\sigma_2$ will reduce the value of $\bm{\phi}^T \mX^T \mX \bm{\phi}$ since $\sigma_1 \geq \sigma_2$. Hence, $\mU(:, 1)$ is the optimal choice.
 
 ---
 
 \subsection*{Part (b)}
-We want to show that if $\bm{\phi}$ is an optimal solution, then $-\bm{\phi}$ is also optimal.
+Show that the solution is not unique if $\bm{\phi}$ is an optimal solution, then $-\bm{\phi}$ is also optimal.
 
 \textbf{Proof:}
 
-1. Consider the objective function $\|\mX \bm{\phi}\|_2^2 = \bm{\phi}^T \mX^T \mX \bm{\phi}$.
-2. If we take $-\bm{\phi}$, we have
+Consider the objective function 
+	\[
+	\|\mX \bm{\phi}\|_2^2 = \bm{\phi}^T \mX^T \mX \bm{\phi}
+	\]
+
+Take $-\bm{\phi}$
    \[
    \|\mX (-\bm{\phi})\|_2^2 = (-\bm{\phi})^T \mX^T \mX (-\bm{\phi}) = \bm{\phi}^T \mX^T \mX \bm{\phi}.
    \]
-3. Thus, the value of the objective function remains unchanged, which implies that both $\bm{\phi}$ and $-\bm{\phi}$ are optimal solutions.
+
+The value of the objective function remains unchanged, which implies that both $\bm{\phi}$ and $-\bm{\phi}$ are optimal solutions.
 
 ---
 
 \subsection*{Part (c)}
-We want to show that the first $r$ columns of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximize $\|\mX \bm{\mW}\|_F^2$ subject to $\bm{\mW}^T \bm{\mW} = \mI_r$.
+Show that the first $r$ columns of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximize $\|\mX \bm{\mW}\|_F^2, s.t.$ $\bm{\mW}^T \bm{\mW} = \mI_r$.
 
 \textbf{Proof:}
 
-1. The objective function can be written as
+The objective function can be written as
    \[
    \|\mX \bm{\mW}\|_F^2 = \text{Tr}(\bm{\mW}^T \mX^T \mX \bm{\mW}).
    \]
-2. Using the SVD $\mX^T \mX = \mU \mS \mU^T$, we have
+By SVD $\mX^T \mX = \mU \mS \mU^T$,
    \[
    \text{Tr}(\bm{\mW}^T \mU \mS \mU^T \bm{\mW}).
    \]
-   Let $\bm{\mV} = \mU^T \bm{\mW}$. Since $\mU$ is orthogonal, $\bm{\mV}^T \bm{\mV} = \mI_r$. The objective becomes
+Let $\bm{\mV} = \mU^T \bm{\mW}$. Since $\mU$ is orthogonal, $\bm{\mV}^T \bm{\mV} = \mI_r$. The objective becomes
    \[
    \text{Tr}(\bm{\mV}^T \mS \bm{\mV}).
    \]
-3. The trace $\text{Tr}(\bm{\mV}^T \mS \bm{\mV})$ is maximized when $\bm{\mV}$ aligns with the first $r$ columns of $\mU$, corresponding to the largest $r$ singular values $\sigma_1, \dots, \sigma_r$. Therefore, $\bm{\mW} = \mU(:, 1:r)$ is the optimal solution.
+The trace $\text{Tr}(\bm{\mV}^T \mS \bm{\mV})$ is maximized when $\bm{\mV}$ aligns with the first $r$ columns of $\mU$, corresponding to the largest $r$ singular values $\sigma_1, \dots, \sigma_r$. Therefore, $\bm{\mW} = \mU(:, 1:r)$ is the optimal solution.
 
 ---
 
 \subsection*{Part (d)}
-Assuming all singular values in $\mS$ are different, we need to determine how many possible different $\bm{\mW}$'s will maximize the objective.
+Assuming the singular values in $\mS$ are different, how many possible different $\bm{\mW}$'s will maximize the objective?
 
-\textbf{Analysis:}
+\textbf{Answer:}
 
-1. The optimal $\bm{\mW}$ is formed by choosing any orthogonal basis spanning the subspace corresponding to the largest $r$ singular values.
-2. Since the singular values are distinct, the number of possible orthogonal bases is given by the orthogonal group $O(r)$, which consists of $r \times r$ orthogonal matrices.
+Given that the singular values in \(\mathbf{S}\) are all distinct, the optimization problem of maximizing \(\|\mathbf{X} \mathbf{W}\|_F^2\) under the constraint \(\mathbf{W}^T \mathbf{W} = \mathbf{I}_r\) has solutions that can be expressed as:
 
-\textbf{Conclusion:}
-The number of possible different $\bm{\mW}$'s is infinite, as it is characterized by the orthogonal group $O(r)$, which is a continuous group.
+\[
+\mathbf{W} = \mathbf{U}_r \mathbf{Q},
+\]
+
+where \(\mathbf{U}_r\) consists of the first \(r\) columns of \(\mathbf{U}\), and \(\mathbf{Q}\) is any orthogonal \(r \times r\) matrix such that \(\mathbf{Q}^T \mathbf{Q} = \mathbf{I}_r\). The set of all such orthogonal matrices \(\mathbf{Q}\) forms the orthogonal group \(O(r)\).
 
 \newpage
 
