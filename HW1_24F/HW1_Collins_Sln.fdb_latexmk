@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1728531471.87792 "e:/CPSC 8420 Advances Machine Learning/HW1_24F/HW1_Collins_Sln.tex" "HW1_Collins_Sln.pdf" "HW1_Collins_Sln" 1728531473.15089 0
+["pdflatex"] 1730572186.77511 "e:/CPSC 8420 Advances Machine Learning/HW1_24F/HW1_Collins_Sln.tex" "HW1_Collins_Sln.pdf" "HW1_Collins_Sln" 1730572188.05258 0
   "C:/Users/Matthew/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1728521165 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Matthew/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1728425175 11949141 eb5c7c5f845b278623433690bb0fd2ec ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm" 1233951848 1004 54797486969f23fa377b128694d548df ""
@@ -97,8 +97,8 @@
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/tools/calc.sty" 1718356376 10214 61188260d324e94bc2f66825d7d3fdf4 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
-  "HW1_Collins_Sln.aux" 1728531472 5646 617cb7f4abd5e7c3085dcd751882fcf2 "pdflatex"
-  "HW1_Collins_Sln.out" 1728531472 2113 98cbcb3c1604588f210831822ba1e8f3 "pdflatex"
+  "HW1_Collins_Sln.aux" 1730572187 5646 617cb7f4abd5e7c3085dcd751882fcf2 "pdflatex"
+  "HW1_Collins_Sln.out" 1730572187 2113 98cbcb3c1604588f210831822ba1e8f3 "pdflatex"
   "HW1_Collins_Sln.tex" 1728531468 21930 4a7196f357041c9595c3f296296442bd ""
   "e:/CPSC 8420 Advances Machine Learning/HW1_24F/HW1_Collins_Sln.tex" 1728531468 21930 4a7196f357041c9595c3f296296442bd ""
   "hw1_1_lasso.py" 1728516825 2397 e72bdc822cc0c97c0ab7dd350d19bdae ""
