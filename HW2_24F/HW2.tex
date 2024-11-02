@@ -1,0 +1,297 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsbsy,amssymb,verbatim,fullpage,ifthen,graphicx,bm,amsfonts,amsthm,url}
+\usepackage{graphicx}
+\usepackage{xcolor}
+%\usepackage[dvipsnames]{xcolor}
+\usepackage{algpseudocode}
+\newcommand{\mfile}[1]  {{\small \verbatiminput{./#1}}} % Jeff Fessler, input matlab file
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\minimize}{\operatorname*{minimize\ }}
+\newcommand{\maximize}{\operatorname*{maximize}}
+\newcommand{\opdet}[1]{\operatorname{\textbf{det}}\left(#1\right)}
+\newcommand{\optr}[1]{\operatorname{\textbf{tr}}\left(#1\right)}
+\newcommand{\answer}[2][blue]{\ifdefined\AnswerDefine{\color{#1}\it#2}\fi}
+\newcommand{\mtx}[1]{\mathbf{#1}}
+\newcommand{\vct}[1]{\mathbf{#1}}
+\def \lg       {\langle}
+\def \rg       {\rangle}
+\def \mA {\mtx{A}}
+\def \mB {\mtx{B}}
+\def \mI {\mtx{I}}
+\def \mJ {\mtx{J}}
+\def \mU {\mtx{U}}
+\def \mS {\mtx{S}}
+\def \mV {\mtx{V}}
+\def \mW {\mtx{W}}
+\def \mLambda {\mtx{\Lambda}}
+\def \mSigma {\mtx{\Sigma}}
+\def \mX {\mtx{X}}
+\def \mY {\mtx{Y}}
+\def \mZ {\mtx{Z}}
+\def \zero     {\mathbf{0}}
+\def \vzero    {\vct{0}}
+\def \vone    {\vct{1}}
+\def \vu {\vct{u}}
+\def \vv {\vct{v}}
+\def \vx {\vct{x}}
+\def \vy {\vct{y}}
+\def \vz {\vct{z}}
+\def \vphi {\vct{\phi}}
+\def \vmu {\vct{\mu}}
+\def \R {\mathbb{R}}
+
+
+\usepackage{xspace}
+\makeatletter
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+
+\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+\def\cf{\emph{c.f}\onedot} \def\Cf{\emph{C.f}\onedot}
+\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+\def\etal{\emph{et al}\onedot} \def\st{\emph{s.t}\onedot}
+\pagestyle{plain}
+
+\title{{\bf Homework Set 2, CPSC 8420, Fall 2024}} % Change to the appropriate homework number
+\author{\Large\underline{Your Name}}
+\date{\textbf{\Large\textcolor{red}{Due 10/28/2024, Monday, 11:59PM EST}}} % put your name in the LastName, FirstName format
+%\date{\today}
+
+\begin{document}
+	\maketitle
+	
+
+	\section*{Problem 1}
+	For Principle Component Analysis (PCA), from the perspective of maximizing variance (assume the data is already self-centered)
+	\begin{itemize}
+		\item show that the first column of $\mU$, where $[\mU,\mS]=svd(\mX^T\mX)$ will $\maximize \|\mX \bm{\phi}\|^2_2, \st \ \|\bm{\phi}\|_2=1$. (Note: you need prove why it is optimal than any other reasonable combinations of $\mU_i$, say $\hat{\bm{\phi}}=0.8*\mU(:,1)+0.6*\mU(:,2)$ which also  satisfies $\|\hat{\bm{\phi}}\|_2=1$.) 
+		\item show that the solution is not unique, say if $\bm{\phi}$ is the optimal solution, so is $-\bm{\phi}$. 
+		\item show that first $r$  columns of $\mU$, where $[\mU,\mS]=svd(\mX^T\mX)$ $\maximize \|\mX \bm{\mW}\|^2_F, \st \ \bm{\mW}^T\bm{\mW}=\mI_r$.
+		\item Assume the singular values are all different in $\mS$, then how many possible different $\mW$'s will maximize the objective above?
+	\end{itemize} 
+	
+	\section*{Solution}
+
+\subsection*{Part (a)}
+We want to show that the first column of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximizes $\|\mX \bm{\phi}\|_2^2$ subject to $\|\bm{\phi}\|_2 = 1$.
+
+\textbf{Proof:}
+
+1. We aim to maximize
+   \[
+   \|\mX \bm{\phi}\|_2^2 = \bm{\phi}^T \mX^T \mX \bm{\phi}
+   \]
+   subject to $\|\bm{\phi}\|_2 = 1$.
+
+2. Since $\mX^T \mX$ is a symmetric, positive semi-definite matrix, we can decompose it as
+   \[
+   \mX^T \mX = \mU \mS \mU^T
+   \]
+   where $\mU$ is an orthogonal matrix (i.e., $\mU^T \mU = \mI$) and $\mS$ is a diagonal matrix containing the singular values $\sigma_1 \geq \sigma_2 \geq \dots \geq \sigma_n \geq 0$.
+
+3. Substituting the decomposition into the objective function, we get
+   \[
+   \bm{\phi}^T \mX^T \mX \bm{\phi} = \bm{\phi}^T \mU \mS \mU^T \bm{\phi}.
+   \]
+   Let $\bm{\psi} = \mU^T \bm{\phi}$. Since $\mU$ is orthogonal, $\|\bm{\psi}\|_2 = \|\bm{\phi}\|_2 = 1$. Thus, the expression becomes
+   \[
+   \bm{\phi}^T \mU \mS \mU^T \bm{\phi} = \bm{\psi}^T \mS \bm{\psi}.
+   \]
+   
+4. The quantity $\bm{\psi}^T \mS \bm{\psi}$ is maximized when $\bm{\psi}$ aligns with the eigenvector corresponding to the largest singular value $\sigma_1$. Therefore, the maximum is achieved when $\bm{\phi} = \mU(:, 1)$.
+
+5. If we consider another vector $\hat{\bm{\phi}} = 0.8 \mU(:, 1) + 0.6 \mU(:, 2)$ that satisfies $\|\hat{\bm{\phi}}\|_2 = 1$, the contribution from $\sigma_2$ will reduce the value of $\bm{\phi}^T \mX^T \mX \bm{\phi}$ since $\sigma_1 \geq \sigma_2$. Hence, $\mU(:, 1)$ is the optimal choice.
+
+---
+
+\subsection*{Part (b)}
+We want to show that if $\bm{\phi}$ is an optimal solution, then $-\bm{\phi}$ is also optimal.
+
+\textbf{Proof:}
+
+1. Consider the objective function $\|\mX \bm{\phi}\|_2^2 = \bm{\phi}^T \mX^T \mX \bm{\phi}$.
+2. If we take $-\bm{\phi}$, we have
+   \[
+   \|\mX (-\bm{\phi})\|_2^2 = (-\bm{\phi})^T \mX^T \mX (-\bm{\phi}) = \bm{\phi}^T \mX^T \mX \bm{\phi}.
+   \]
+3. Thus, the value of the objective function remains unchanged, which implies that both $\bm{\phi}$ and $-\bm{\phi}$ are optimal solutions.
+
+---
+
+\subsection*{Part (c)}
+We want to show that the first $r$ columns of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximize $\|\mX \bm{\mW}\|_F^2$ subject to $\bm{\mW}^T \bm{\mW} = \mI_r$.
+
+\textbf{Proof:}
+
+1. The objective function can be written as
+   \[
+   \|\mX \bm{\mW}\|_F^2 = \text{Tr}(\bm{\mW}^T \mX^T \mX \bm{\mW}).
+   \]
+2. Using the SVD $\mX^T \mX = \mU \mS \mU^T$, we have
+   \[
+   \text{Tr}(\bm{\mW}^T \mU \mS \mU^T \bm{\mW}).
+   \]
+   Let $\bm{\mV} = \mU^T \bm{\mW}$. Since $\mU$ is orthogonal, $\bm{\mV}^T \bm{\mV} = \mI_r$. The objective becomes
+   \[
+   \text{Tr}(\bm{\mV}^T \mS \bm{\mV}).
+   \]
+3. The trace $\text{Tr}(\bm{\mV}^T \mS \bm{\mV})$ is maximized when $\bm{\mV}$ aligns with the first $r$ columns of $\mU$, corresponding to the largest $r$ singular values $\sigma_1, \dots, \sigma_r$. Therefore, $\bm{\mW} = \mU(:, 1:r)$ is the optimal solution.
+
+---
+
+\subsection*{Part (d)}
+Assuming all singular values in $\mS$ are different, we need to determine how many possible different $\bm{\mW}$'s will maximize the objective.
+
+\textbf{Analysis:}
+
+1. The optimal $\bm{\mW}$ is formed by choosing any orthogonal basis spanning the subspace corresponding to the largest $r$ singular values.
+2. Since the singular values are distinct, the number of possible orthogonal bases is given by the orthogonal group $O(r)$, which consists of $r \times r$ orthogonal matrices.
+
+\textbf{Conclusion:}
+The number of possible different $\bm{\mW}$'s is infinite, as it is characterized by the orthogonal group $O(r)$, which is a continuous group.
+
+\newpage
+
+\section*{Problem 2}
+	Given matrix $\mX\in\R^{n\times p}$ (assume each column is centered already), where $n$ denotes sample size while $p$ feature size. To conduct PCA, we need find eigenvectors to the  largest eigenvalues of $\mX^T\mX$, where usually the complexity is $\mathcal{O}(p^3)$. Apparently when $n\ll p$, this is not economic when $p$ is large. Please consider conducting PCA based on $\mX\mX^T$ and obtain the eigenvectors for $\mX^T\mX$ accordingly and use experiment to demonstrate the acceleration.
+
+	\section*{Solution}
+
+	Given that $\mathbf{X} \in \mathbb{R}^{n \times p}$, we typically need to compute the eigenvectors of $\mathbf{X}^T \mathbf{X}$ to perform Principal Component Analysis (PCA). However, when $n \ll p$, the computational complexity of $\mathcal{O}(p^3)$ for finding the eigenvectors of $\mathbf{X}^T \mathbf{X}$ becomes inefficient. We can instead conduct PCA using $\mathbf{X} \mathbf{X}^T$ and then use these results to recover the eigenvectors for $\mathbf{X}^T \mathbf{X}$.
+	
+	\subsection*{Method}
+	1. Compute the eigenvalues and eigenvectors of the $n \times n$ matrix $\mathbf{X} \mathbf{X}^T$.
+	2. If $\mathbf{X} \mathbf{X}^T = \mathbf{U} \mathbf{\Lambda} \mathbf{U}^T$, where $\mathbf{U}$ contains the eigenvectors and $\mathbf{\Lambda}$ is a diagonal matrix of eigenvalues, we can obtain the eigenvectors of $\mathbf{X}^T \mathbf{X}$ as follows:
+	   \[
+	   \mathbf{V} = \mathbf{X}^T \mathbf{U} \mathbf{\Lambda}^{-\frac{1}{2}},
+	   \]
+	   where $\mathbf{V}$ contains the eigenvectors of $\mathbf{X}^T \mathbf{X}$.
+	
+	\subsection*{Implementation in Python}
+	Below is a Python code to demonstrate the method and compare the computational time of both approaches.
+	
+	\begin{verbatim}
+	import numpy as np
+	import time
+	
+	# Generate a random matrix X with n << p
+	n, p = 100, 1000
+	np.random.seed(0)
+	X = np.random.randn(n, p)
+	
+	# Method 1: Compute eigenvectors of X^T X directly
+	start_time = time.time()
+	XtX = np.dot(X.T, X)
+	_, V1 = np.linalg.eigh(XtX)
+	time_direct = time.time() - start_time
+	
+	# Method 2: Compute eigenvectors of X X^T and transform
+	start_time = time.time()
+	XXt = np.dot(X, X.T)
+	D, U = np.linalg.eigh(XXt)
+	V2 = np.dot(X.T, U) * (1 / np.sqrt(D))  # Normalize eigenvectors
+	time_indirect = time.time() - start_time
+	
+	# Display the computational times
+	print("Time using direct method (X^T X):", time_direct, "seconds")
+	print("Time using indirect method (X X^T):", time_indirect, "seconds")
+	\end{verbatim}
+	
+	\subsection*{Experimental Results}
+	From the experiment, we expect that the indirect method using $\mathbf{X} \mathbf{X}^T$ will be significantly faster than the direct method when $n \ll p$. The computational complexity of finding eigenvectors of an $n \times n$ matrix $\mathbf{X} \mathbf{X}^T$ is $\mathcal{O}(n^3)$, which is much more efficient when $n \ll p$.
+	
+	\subsection*{Conclusion}
+	This approach allows us to efficiently perform PCA when the number of features $p$ is much larger than the number of samples $n$. The experiment demonstrates a reduction in computational time using the indirect method.	
+	
+	\newpage
+
+	
+	%\section
+	\section*{Problem 3}
+	Let $\theta^*\in\R^d$ be the ground truth linear model parameter and $\mX\in\R^{N\times d}$ be the observing matrix and each column of $\mX$ is independent. Assume the linear model is $\vy=\mX\theta^*+\epsilon$ where $\epsilon$ follows $Gaussian(0,\sigma^2\mI)$. Assume $\hat{\theta}=\arg\min\limits_\theta \|\mX\theta-\vy\|^2$.
+	\begin{itemize}
+		\item Please show that $\mX^T\mX$ is invertible.
+		\item Show that $MSE(\theta^*,\hat{\theta}):=E_\epsilon \{\|\theta^*-\hat{\theta}\|^2\}=\sigma^2 trace((\mX^T\mX)^{-1})$
+		\item Show that as $N$ increases, $MSE$ decreases. (hint: make use of `Woodbury matrix identity')
+	\end{itemize} 
+
+	\section*{Solution}
+
+	Let $\theta^* \in \mathbb{R}^d$ be the ground truth linear model parameter, and $\mathbf{X} \in \mathbb{R}^{N \times d}$ be the observing matrix, where each column of $\mathbf{X}$ is independent. We are given the linear model 
+	\[
+	\mathbf{y} = \mathbf{X} \theta^* + \epsilon
+	\] 
+	where $\epsilon \sim \mathcal{N}(0, \sigma^2 \mathbf{I})$. Let 
+	\[
+	\hat{\theta} = \arg\min_{\theta} \|\mathbf{X} \theta - \mathbf{y}\|^2.
+	\]
+	
+	\subsection*{Part (a)}
+	We need to show that $\mathbf{X}^T \mathbf{X}$ is invertible.
+	
+	\textbf{Proof:}
+	1. Since each column of $\mathbf{X}$ is independent, the columns of $\mathbf{X}$ form a linearly independent set.
+	2. Therefore, $\mathbf{X}^T \mathbf{X}$, which is a $d \times d$ Gram matrix, has full rank.
+	3. A matrix with full rank is invertible. Hence, $\mathbf{X}^T \mathbf{X}$ is invertible.
+	
+	---
+	
+	\subsection*{Part (b)}
+	We want to show that 
+	\[
+	\text{MSE}(\theta^*, \hat{\theta}) := \mathbb{E}_\epsilon \left\{ \|\theta^* - \hat{\theta}\|^2 \right\} = \sigma^2 \text{trace}((\mathbf{X}^T \mathbf{X})^{-1}).
+	\]
+	
+	\textbf{Proof:}
+	1. The estimator $\hat{\theta}$ is given by the least squares solution:
+	   \[
+	   \hat{\theta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}.
+	   \]
+	   Substituting $\mathbf{y} = \mathbf{X} \theta^* + \epsilon$, we get
+	   \[
+	   \hat{\theta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X} \theta^* + \epsilon).
+	   \]
+	2. Simplifying, we have
+	   \[
+	   \hat{\theta} = \theta^* + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \epsilon.
+	   \]
+	3. The mean squared error (MSE) is given by
+	   \[
+	   \text{MSE}(\theta^*, \hat{\theta}) = \mathbb{E}_\epsilon \left\{ \|\theta^* - \hat{\theta}\|^2 \right\} = \mathbb{E}_\epsilon \left\{ \|(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \epsilon\|^2 \right\}.
+	   \]
+	4. Since $\epsilon \sim \mathcal{N}(0, \sigma^2 \mathbf{I})$, we have
+	   \[
+	   \mathbb{E}_\epsilon \left\{ \epsilon \epsilon^T \right\} = \sigma^2 \mathbf{I}.
+	   \]
+	5. Thus,
+	   \[
+	   \mathbb{E}_\epsilon \left\{ (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \epsilon \epsilon^T \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \right\} = \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}.
+	   \]
+	6. Taking the trace, we get
+	   \[
+	   \text{MSE}(\theta^*, \hat{\theta}) = \sigma^2 \text{trace}((\mathbf{X}^T \mathbf{X})^{-1}).
+	   \]
+	
+	---
+	
+	\subsection*{Part (c)}
+	We want to show that as $N$ increases, the MSE decreases using the Woodbury matrix identity.
+	
+	\textbf{Proof:}
+	1. The Woodbury matrix identity states that for matrices $\mathbf{A}$, $\mathbf{U}$, $\mathbf{C}$, and $\mathbf{V}$ of appropriate dimensions:
+	   \[
+	   (\mathbf{A} + \mathbf{U} \mathbf{C} \mathbf{V})^{-1} = \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} (\mathbf{C}^{-1} + \mathbf{V} \mathbf{A}^{-1} \mathbf{U})^{-1} \mathbf{V} \mathbf{A}^{-1}.
+	   \]
+	2. As $N$ increases, we add more rows to $\mathbf{X}$, effectively increasing the information content in $\mathbf{X}^T \mathbf{X}$.
+	3. This results in $\mathbf{X}^T \mathbf{X}$ becoming better conditioned, meaning that $(\mathbf{X}^T \mathbf{X})^{-1}$ decreases in magnitude.
+	4. Consequently, $\text{trace}((\mathbf{X}^T \mathbf{X})^{-1})$ decreases, leading to a reduction in the MSE.
+	5. Hence, as $N$ increases, $\text{MSE}(\theta^*, \hat{\theta})$ decreases, indicating improved estimation accuracy.
+
+
+\end{document}
