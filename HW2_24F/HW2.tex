@@ -172,20 +172,22 @@ where \(\mathbf{U}_r\) consists of the first \(r\) columns of \(\mathbf{U}\), an
 \section*{Problem 2}
 	Given matrix $\mX\in\R^{n\times p}$ (assume each column is centered already), where $n$ denotes sample size while $p$ feature size. To conduct PCA, we need find eigenvectors to the  largest eigenvalues of $\mX^T\mX$, where usually the complexity is $\mathcal{O}(p^3)$. Apparently when $n\ll p$, this is not economic when $p$ is large. Please consider conducting PCA based on $\mX\mX^T$ and obtain the eigenvectors for $\mX^T\mX$ accordingly and use experiment to demonstrate the acceleration.
 
-	\section*{Solution}
+	\section*{Answer}
 
-	Given that $\mathbf{X} \in \mathbb{R}^{n \times p}$, we typically need to compute the eigenvectors of $\mathbf{X}^T \mathbf{X}$ to perform Principal Component Analysis (PCA). However, when $n \ll p$, the computational complexity of $\mathcal{O}(p^3)$ for finding the eigenvectors of $\mathbf{X}^T \mathbf{X}$ becomes inefficient. We can instead conduct PCA using $\mathbf{X} \mathbf{X}^T$ and then use these results to recover the eigenvectors for $\mathbf{X}^T \mathbf{X}$.
+	To efficiently perform PCA when $n\ll p$, the eigenvectors of $\mX^T\mX$ can be obtained from the eigenvectors of $\mX\mX^T$. This is computationally cheaper when $p$ is large and $n$ is relatively small.
 	
-	\subsection*{Method}
-	1. Compute the eigenvalues and eigenvectors of the $n \times n$ matrix $\mathbf{X} \mathbf{X}^T$.
-	2. If $\mathbf{X} \mathbf{X}^T = \mathbf{U} \mathbf{\Lambda} \mathbf{U}^T$, where $\mathbf{U}$ contains the eigenvectors and $\mathbf{\Lambda}$ is a diagonal matrix of eigenvalues, we can obtain the eigenvectors of $\mathbf{X}^T \mathbf{X}$ as follows:
+	By decomposition of $\mX\mX^T$,
 	   \[
-	   \mathbf{V} = \mathbf{X}^T \mathbf{U} \mathbf{\Lambda}^{-\frac{1}{2}},
+	   \mathbf{X}\mathbf{X}^T = \mathbf{U} \mathbf{\Lambda} \mathbf{U}^T,
 	   \]
-	   where $\mathbf{V}$ contains the eigenvectors of $\mathbf{X}^T \mathbf{X}$.
 	
-	\subsection*{Implementation in Python}
-	Below is a Python code to demonstrate the method and compare the computational time of both approaches.
+	The eigenvectors of $\mX^T\mX$ can be obtained from $\mU$.
+		\[
+		\mathbf{V} = \mathbf{X}^T \mathbf{U} \mathbf{\Lambda}^{-\frac{1}{2}}
+		\]
+	 
+	
+	\subsection*{Python Code}
 	
 	\begin{verbatim}
 	import numpy as np

@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1730585013.27816 "e:/CPSC 8420 Advances Machine Learning/HW2_24F/HW2.tex" "HW2.pdf" "HW2" 1730585013.89751 0
+["pdflatex"] 1730587117.18651 "e:/CPSC 8420 Advances Machine Learning/HW2_24F/HW2.tex" "HW2.pdf" "HW2" 1730587117.80174 0
   "C:/Users/Matthew/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1730580531 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Matthew/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1095.pk" 1730580535 12668 4f7109717ad89bf76d2bd3db4210b487 ""
   "C:/Users/Matthew/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1728425175 11949141 eb5c7c5f845b278623433690bb0fd2ec ""
@@ -88,9 +88,9 @@
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/tools/xspace.sty" 1718356376 4545 e3f4de576c914e2000f07f69a891c071 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
-  "HW2.aux" 1730585013 32 4d1825978335c8847f72f7c473f9edc8 "pdflatex"
-  "HW2.tex" 1730585012 14240 c54ccea6d2478452c59ba30d70484d66 ""
-  "e:/CPSC 8420 Advances Machine Learning/HW2_24F/HW2.tex" 1730585012 14240 c54ccea6d2478452c59ba30d70484d66 ""
+  "HW2.aux" 1730587117 32 4d1825978335c8847f72f7c473f9edc8 "pdflatex"
+  "HW2.tex" 1730587116 13574 1e506b9c4c2920b2b09a72eb9686c766 ""
+  "e:/CPSC 8420 Advances Machine Learning/HW2_24F/HW2.tex" 1730587116 13574 1e506b9c4c2920b2b09a72eb9686c766 ""
   (generated)
   "HW2.aux"
   "HW2.log"
