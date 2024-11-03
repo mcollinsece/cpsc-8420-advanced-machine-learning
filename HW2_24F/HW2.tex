@@ -4,6 +4,9 @@
 \usepackage{xcolor}
 %\usepackage[dvipsnames]{xcolor}
 \usepackage{algpseudocode}
+\usepackage{breakurl}
+\usepackage{url}
+
 \newcommand{\mfile}[1]  {{\small \verbatiminput{./#1}}} % Jeff Fessler, input matlab file
 \newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
 \newcommand{\R}{\mathbb{R}}
@@ -59,7 +62,7 @@
 \pagestyle{plain}
 
 \title{{\bf Homework Set 2, CPSC 8420, Fall 2024}} % Change to the appropriate homework number
-\author{\Large\underline{Your Name}}
+\author{\Large\underline{Matthew Collins}}
 \date{\textbf{\Large\textcolor{red}{Due 10/28/2024, Monday, 11:59PM EST}}} % put your name in the LastName, FirstName format
 %\date{\today}
 
@@ -76,7 +79,7 @@
 		\item Assume the singular values are all different in $\mS$, then how many possible different $\mW$'s will maximize the objective above?
 	\end{itemize} 
 	
-	\section*{Solution}
+	\section*{Answer}
 
 \subsection*{Part (a)}
 Show that the first column of $\mU$, where $[\mU, \mS] = \text{svd}(\mX^T \mX)$, maximizes $\|\mX \bm{\phi}\|_2^2$ subject to $\|\bm{\phi}\|_2 = 1$.
@@ -185,43 +188,86 @@ where \(\mathbf{U}_r\) consists of the first \(r\) columns of \(\mathbf{U}\), an
 		\[
 		\mathbf{V} = \mathbf{X}^T \mathbf{U} \mathbf{\Lambda}^{-\frac{1}{2}}
 		\]
-	 
+	
+	Python code was created below to expiriment and demonstrate the differences between eigenvalues of $\mX^T\mX$ and $\mX\mX^T$.
+	The python code iterates through different sample sizes (n) and different feature sizes (p) and keeps track of the time it takes
+	to comput the eigenvalues using both $\mX^T\mX$ and $\mX\mX^T$. From the experiment, we expect that the indirect method using $\mathbf{X} \mathbf{X}^T$ 
+	will be significantly faster than the direct method when $n \ll p$. The computational complexity of finding eigenvectors of 
+	an $n \times n$ matrix $\mathbf{X} \mathbf{X}^T$ is $\mathcal{O}(n^3)$, which is much more efficient when $n \ll p$.
+	As can be seen in Figure~\ref{fig:speedup_graph} and Figure~\ref{fig:speedup_table}, for cases where $n\ll p$, 
+	the dramatic speedup of using $\mX\mX^T$ can be seen that appears to be very close to $\mathcal{O}(n^3)$.
+	
+	\begin{figure}[htbp]
+    	\centering
+    	\includegraphics[width=\textwidth]{figures/problem2_graph.png}
+    	\caption{Speedup Compared to Feature Size}
+		\label{fig:speedup_graph}
+	\end{figure}
+
+	\begin{figure}[htbp]
+    	\centering
+    	\includegraphics[width=\textwidth]{figures/problem2_table.png}
+    	\caption{Speedup Table}
+		\label{fig:speedup_table}
+	\end{figure}
 	
 	\subsection*{Python Code}
 	
 	\begin{verbatim}
 	import numpy as np
 	import time
-	
-	# Generate a random matrix X with n << p
-	n, p = 100, 1000
-	np.random.seed(0)
-	X = np.random.randn(n, p)
-	
-	# Method 1: Compute eigenvectors of X^T X directly
-	start_time = time.time()
-	XtX = np.dot(X.T, X)
-	_, V1 = np.linalg.eigh(XtX)
-	time_direct = time.time() - start_time
-	
-	# Method 2: Compute eigenvectors of X X^T and transform
-	start_time = time.time()
-	XXt = np.dot(X, X.T)
-	D, U = np.linalg.eigh(XXt)
-	V2 = np.dot(X.T, U) * (1 / np.sqrt(D))  # Normalize eigenvectors
-	time_indirect = time.time() - start_time
-	
-	# Display the computational times
-	print("Time using direct method (X^T X):", time_direct, "seconds")
-	print("Time using indirect method (X X^T):", time_indirect, "seconds")
+	import pandas as pd
+	import matplotlib.pyplot as plt
+
+	n_values = [50, 100, 200]
+	p_values = [500, 1000, 2000]
+
+	results = []
+
+	for n in n_values:
+		for p in p_values:
+			np.random.seed(0)
+			X = np.random.randn(n, p)
+
+			# Direct Eigenvalue Decomposition of X^T X
+			start_time = time.time()
+			XtX = np.dot(X.T, X)
+			_, V1 = np.linalg.eigh(XtX)
+			time_direct = time.time() - start_time
+
+			# Indirect (Efficient Computation) Eigenvalue Decomposition using X X^T
+			start_time = time.time()
+			XXt = np.dot(X, X.T)
+			D, U = np.linalg.eigh(XXt)
+			V2 = np.dot(X.T, U) / np.sqrt(D)  # Normalize eigenvectors
+			time_indirect = time.time() - start_time
+
+			epsilon = 1e-10
+			speedup = time_direct / (time_indirect + epsilon)
+
+			results.append({
+				'n': n,
+				'p': p,
+				'time_direct': time_direct,
+				'time_indirect': time_indirect,
+				'speedup': speedup
+			})
+
+	results_df = pd.DataFrame(results)
+	print(results_df)
+
+	for n in n_values:
+		subset = results_df[results_df['n'] == n]
+		plt.plot(subset['p'], subset['speedup'], marker='o', label=f'n={n}')
+
+	plt.xlabel('p (Feature Size)')
+	plt.ylabel('Speedup (Time Direct / Time Indirect)')
+	plt.title('Speedup of Indirect Method vs. Direct Method')
+	plt.legend()
+	plt.grid(True)
+	plt.show()
+
 	\end{verbatim}
-	
-	\subsection*{Experimental Results}
-	From the experiment, we expect that the indirect method using $\mathbf{X} \mathbf{X}^T$ will be significantly faster than the direct method when $n \ll p$. The computational complexity of finding eigenvectors of an $n \times n$ matrix $\mathbf{X} \mathbf{X}^T$ is $\mathcal{O}(n^3)$, which is much more efficient when $n \ll p$.
-	
-	\subsection*{Conclusion}
-	This approach allows us to efficiently perform PCA when the number of features $p$ is much larger than the number of samples $n$. The experiment demonstrates a reduction in computational time using the indirect method.	
-	
 	\newpage
 
 	
@@ -234,59 +280,44 @@ where \(\mathbf{U}_r\) consists of the first \(r\) columns of \(\mathbf{U}\), an
 		\item Show that as $N$ increases, $MSE$ decreases. (hint: make use of `Woodbury matrix identity')
 	\end{itemize} 
 
-	\section*{Solution}
-
-	Let $\theta^* \in \mathbb{R}^d$ be the ground truth linear model parameter, and $\mathbf{X} \in \mathbb{R}^{N \times d}$ be the observing matrix, where each column of $\mathbf{X}$ is independent. We are given the linear model 
-	\[
-	\mathbf{y} = \mathbf{X} \theta^* + \epsilon
-	\] 
-	where $\epsilon \sim \mathcal{N}(0, \sigma^2 \mathbf{I})$. Let 
-	\[
-	\hat{\theta} = \arg\min_{\theta} \|\mathbf{X} \theta - \mathbf{y}\|^2.
-	\]
-	
+	\section*{Answer}
 	\subsection*{Part (a)}
-	We need to show that $\mathbf{X}^T \mathbf{X}$ is invertible.
+	Show that $\mathbf{X}^T \mathbf{X}$ is invertible.
 	
 	\textbf{Proof:}
-	1. Since each column of $\mathbf{X}$ is independent, the columns of $\mathbf{X}$ form a linearly independent set.
-	2. Therefore, $\mathbf{X}^T \mathbf{X}$, which is a $d \times d$ Gram matrix, has full rank.
-	3. A matrix with full rank is invertible. Hence, $\mathbf{X}^T \mathbf{X}$ is invertible.
-	
-	---
+
+	Each column of $\mathbf{X}$ is independent. The columns of $\mathbf{X}$ form a linearly independent set.
+	\[
+	\text{rank}(\mathbf{X}) = d, \quad \text{where } d \text{ is the number of columns in } \mathbf{X}.
+	\]
+	Therefore, if $\mathbf{X}$ has full column rank, then $\mathbf{X}^T \mathbf{X}$ is a $d \times d$ matrix. Since $\mathbf{X}$ has full column rank, $\mathbf{X}^T \mathbf{X}$ is a $d \times d$ matrix, $\text{rank}(\mathbf{X}^T \mathbf{X}) = d$, and $\mathbf{X}^T \mathbf{X}$ is invertible.
+
 	
 	\subsection*{Part (b)}
-	We want to show that 
-	\[
-	\text{MSE}(\theta^*, \hat{\theta}) := \mathbb{E}_\epsilon \left\{ \|\theta^* - \hat{\theta}\|^2 \right\} = \sigma^2 \text{trace}((\mathbf{X}^T \mathbf{X})^{-1}).
-	\]
-	
 	\textbf{Proof:}
-	1. The estimator $\hat{\theta}$ is given by the least squares solution:
+	The estimator $\hat{\theta}$ is given by the least squares solution:
 	   \[
 	   \hat{\theta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \mathbf{y}.
 	   \]
-	   Substituting $\mathbf{y} = \mathbf{X} \theta^* + \epsilon$, we get
+	   Substituting $\mathbf{y} = \mathbf{X} \theta^* + \epsilon$, 
 	   \[
 	   \hat{\theta} = (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T (\mathbf{X} \theta^* + \epsilon).
 	   \]
-	2. Simplifying, we have
+	Simplifying,
 	   \[
 	   \hat{\theta} = \theta^* + (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \epsilon.
 	   \]
-	3. The mean squared error (MSE) is given by
+	The mean squared error (MSE) is given by:
 	   \[
 	   \text{MSE}(\theta^*, \hat{\theta}) = \mathbb{E}_\epsilon \left\{ \|\theta^* - \hat{\theta}\|^2 \right\} = \mathbb{E}_\epsilon \left\{ \|(\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \epsilon\|^2 \right\}.
 	   \]
-	4. Since $\epsilon \sim \mathcal{N}(0, \sigma^2 \mathbf{I})$, we have
+	Since $\epsilon \sim \mathcal{N}(0, \sigma^2 \mathbf{I})$, 
 	   \[
 	   \mathbb{E}_\epsilon \left\{ \epsilon \epsilon^T \right\} = \sigma^2 \mathbf{I}.
 	   \]
-	5. Thus,
 	   \[
 	   \mathbb{E}_\epsilon \left\{ (\mathbf{X}^T \mathbf{X})^{-1} \mathbf{X}^T \epsilon \epsilon^T \mathbf{X} (\mathbf{X}^T \mathbf{X})^{-1} \right\} = \sigma^2 (\mathbf{X}^T \mathbf{X})^{-1}.
 	   \]
-	6. Taking the trace, we get
 	   \[
 	   \text{MSE}(\theta^*, \hat{\theta}) = \sigma^2 \text{trace}((\mathbf{X}^T \mathbf{X})^{-1}).
 	   \]
@@ -294,17 +325,63 @@ where \(\mathbf{U}_r\) consists of the first \(r\) columns of \(\mathbf{U}\), an
 	---
 	
 	\subsection*{Part (c)}
-	We want to show that as $N$ increases, the MSE decreases using the Woodbury matrix identity.
-	
 	\textbf{Proof:}
-	1. The Woodbury matrix identity states that for matrices $\mathbf{A}$, $\mathbf{U}$, $\mathbf{C}$, and $\mathbf{V}$ of appropriate dimensions:
+	The Woodbury matrix identity states that for matrices $\mathbf{A}$, $\mathbf{U}$, $\mathbf{C}$, and $\mathbf{V}$ of appropriate dimensions:
 	   \[
 	   (\mathbf{A} + \mathbf{U} \mathbf{C} \mathbf{V})^{-1} = \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} (\mathbf{C}^{-1} + \mathbf{V} \mathbf{A}^{-1} \mathbf{U})^{-1} \mathbf{V} \mathbf{A}^{-1}.
 	   \]
-	2. As $N$ increases, we add more rows to $\mathbf{X}$, effectively increasing the information content in $\mathbf{X}^T \mathbf{X}$.
-	3. This results in $\mathbf{X}^T \mathbf{X}$ becoming better conditioned, meaning that $(\mathbf{X}^T \mathbf{X})^{-1}$ decreases in magnitude.
-	4. Consequently, $\text{trace}((\mathbf{X}^T \mathbf{X})^{-1})$ decreases, leading to a reduction in the MSE.
-	5. Hence, as $N$ increases, $\text{MSE}(\theta^*, \hat{\theta})$ decreases, indicating improved estimation accuracy.
 
+	where \(\mathbf{A} \in \mathbb{R}^{d \times d}\), \(\mathbf{U} \in \mathbb{R}^{d \times k}\), \(\mathbf{C} \in \mathbb{R}^{k \times k}\), and \(\mathbf{V} \in \mathbb{R}^{k \times d}\).
+	Given \(\mathbf{X} \in \mathbb{R}^{N \times d}\), where \( N \) is the number of observations and \( d \) is the number of features.
+	Suppose we have an initial sample matrix \(\mathbf{X}_0 \in \mathbb{R}^{N_0 \times d}\) and add a new sample \(\mathbf{x} \in \mathbb{R}^{1 \times d}\).
+	The updated observation matrix becomes:
+	\[
+	\mathbf{X} = \begin{pmatrix}
+	\mathbf{X}_0 \\
+	\mathbf{x}
+	\end{pmatrix} \in \mathbb{R}^{(N_0 + 1) \times d}.
+	\]
+	\(\mathbf{X}^T \mathbf{X}\) is updated as:
+	\[
+	\mathbf{X}^T \mathbf{X} = \mathbf{X}_0^T \mathbf{X}_0 + \mathbf{x}^T \mathbf{x}.
+	\]
+
+	Let \(\mathbf{A} = \mathbf{X}_0^T \mathbf{X}_0\), \(\mathbf{U} = \mathbf{x}^T\), \(\mathbf{C} = 1\), and \(\mathbf{V} = \mathbf{x}\).
+	Applying the Woodbury matrix identity, we get:
+	\[
+	(\mathbf{X}_0^T \mathbf{X}_0 + \mathbf{x}^T \mathbf{x})^{-1} = \mathbf{A}^{-1} - \mathbf{A}^{-1} \mathbf{U} (1 + \mathbf{V} \mathbf{A}^{-1} \mathbf{U})^{-1} \mathbf{V} \mathbf{A}^{-1}.
+	\]
+	Simplifying:
+	\[
+	(\mathbf{X}_0^T \mathbf{X}_0 + \mathbf{x}^T \mathbf{x})^{-1} = (\mathbf{X}_0^T \mathbf{X}_0)^{-1} - \frac{(\mathbf{X}_0^T \mathbf{X}_0)^{-1} \mathbf{x}^T \mathbf{x} (\mathbf{X}_0^T \mathbf{X}_0)^{-1}}{1 + \mathbf{x} (\mathbf{X}_0^T \mathbf{X}_0)^{-1} \mathbf{x}^T}.
+	\]
+
+	The term:
+	\[
+	\frac{(\mathbf{X}_0^T \mathbf{X}_0)^{-1} \mathbf{x}^T \mathbf{x} (\mathbf{X}_0^T \mathbf{X}_0)^{-1}}{1 + \mathbf{x} (\mathbf{X}_0^T \mathbf{X}_0)^{-1} \mathbf{x}^T}
+	\]
+	is a positive semi-definite matrix. Subtracting this term from \((\mathbf{X}_0^T \mathbf{X}_0)^{-1}\) decreases the overall trace.
+	Therefore, as we add more samples (i.e., as \( N \) increases), \(\text{trace}((\mathbf{X}^T \mathbf{X})^{-1})\) decreases, leading to a decrease in MSE.
+
+\begin{thebibliography}{99}
+
+\bibitem{PCAArticle}
+Towards Data Science, "Principal Component Analysis (Part 1) — The Different Formulations," \textit{Towards Data Science}, Aug. 30, 2019. [Online]. Available: \burl{https://towardsdatascience.com/principal-component-analysis-part-1-the-different-formulations-6508f63a5553}.
+
+\bibitem{PCAComplexity}
+A. Alekhyo, "Computational Complexity of PCA," \textit{Medium}, Jan. 10, 2021. [Online]. Available: \url{https://alekhyo.medium.com/computational-complexity-of-pca-4cb61143b7e5}.
+
+\bibitem{MSEStackExchange}
+Stats Stack Exchange, "Is MSE decreasing with increasing number of explanatory variables?" \textit{Stats Stack Exchange}, Dec. 18, 2017. [Online]. Available: \url{https://stats.stackexchange.com/questions/306267/is-mse-decreasing-with-increasing-number-of-explanatory-variables}.
+
+\bibitem{MSEWikipedia}
+Wikipedia, "Mean squared error," \textit{Wikipedia, The Free Encyclopedia}, Mar. 1, 2024. [Online]. Available: \url{https://en.wikipedia.org/wiki/Mean_squared_error}.
+
+\bibitem{WoodburyWikipedia}
+Wikipedia, "Woodbury matrix identity," \textit{Wikipedia, The Free Encyclopedia}, Mar. 1, 2024. [Online]. Available: \url{https://en.wikipedia.org/wiki/Woodbury_matrix_identity}.
+
+
+
+\end{thebibliography}
 
 \end{document}
