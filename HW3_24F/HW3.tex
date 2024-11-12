@@ -70,16 +70,105 @@
 	%\section*{Problem 1}
 \section*{Problem 1}
 Please download the image from \url{https://en.wikipedia.org/wiki/Lenna#/media/File:Lenna_(test_image).png} with dimension $512\times512\times3$. Assume for each RGB channel data $X$, we have $[U,\Sigma,V]=svd(X)$. Please show each compression ratio and reconstruction image if we choose first $2, 5, 20, 50,80,100$ components respectively. Also please determine the best component number to obtain a good trade-off between data compression ratio and reconstruction image quality. (Open question, that is your solution will be accepted as long as it's reasonable.)
-	
-	
+
+
+\textbf{Answer:}
+
+In this problem, I created a Python program that used Principal Component Analysis (PCA) on the Lenna image to explore the trade-off between data compression and image quality. 
+The image was loaded and preprocessed by normalizing the pixel values to a range of [0, 1] and centering the data by subtracting the mean for each RGB channel. 
+PCA was then applied independently to each of the three color channels (Red, Green, and Blue). Singular Value Decomposition (SVD) was then performed on each channel, decomposing it into matrices \( U \), \( \Sigma \), and \( V \), 
+where \( \Sigma \) contains the singular values in decreasing order. 
+For each channel, I reconstructed the image using a varying number of principal components (2, 5, 20, 50, 80, and 100). 
+This reconstruction process involved keeping only the top singular values and corresponding components, effectively compressing the image data by reducing dimensionality. 
+The reconstructions were then combined across the RGB channels to produce compressed versions of the image with different levels of quality.
+
+To visually compare the impact of compression, I displayed the reconstructed images in a \(2 \times 3\) grid, with each image showing the result of using a specific number of principal components. 
+At lower component levels (e.g., 2 or 5), the image quality is noticeably reduced, as much of the detailed information is lost due to high compression. 
+As I increase the number of components (50, 80, and 100), the image quality improves significantly, with higher component levels preserving more of the original image’s details. 
+
+I calculated the percentage of variance retained for each color channel. This variance retention measure indicates how much of the original image information is preserved at each compression level. 
+I plotted these values for the Red, Green, and Blue channels, showing that the variance retained increases as more components are used. 
+This demonstrates that higher component counts (80 or 100) retain most of the image’s variance, whereas lower component counts retain less.
+
+From the reconstructed images and the variance plots, a reasonable balance between data compression and image quality can be seen. 
+The variance of all three color channels, in Figure 2, begins to flatten around 40 to 60 principal components. Somewhere around 40 to 60 components provides enough compression while retaining enough variance to capture most of the important 
+visual features of the image without excessive data storage. 
+However, this is a subjective estimation. The exact choice of components depends on the specific application and acceptable quality loss—higher component counts may be preferred in scenarios where visual fidelity is critical.
+
+\begin{figure}[htbp]
+    	\centering
+    	\includegraphics[width=\textwidth]{figures/hw3_1_1.png}
+    	\caption{Reconstructed Lena Image Using 2, 5, 20, 50, 80, 100 Columns of U}
+		\label{fig:reconstructed_lena}
+\end{figure}
+
+\begin{figure}[htbp]
+    	\centering
+    	\includegraphics[width=\textwidth]{figures/hw3_1_2.png}
+    	\caption{Variance of R,G,B Channels}
+		\label{fig:variance_lena}
+\end{figure}
+
 	
 		\newpage
 	\section*{Problem 2}
 	Let's revisit Least Squares Problem: $\minimize \limits_{\bm{\beta}} \frac{1}{2}\|\vy-\mA\bm{\beta}\|^2_2$, where $\mA\in\R^{n\times p}$.
 	\begin{enumerate}
 		\item Please show that if $p>n$, then vanilla solution $(\mA^T\mA)^{-1}\mA^T\vy$ is not applicable any more.	
+		
+		\textbf{Answer:}
+		
+		To demonstrate why the vanilla solution is not applicable when \( p > n \), take Singular Value Decomposition (SVD) of the matrix \(\mathbf{A} \in \mathbb{R}^{n \times p}\). 
+		When \( p > n \), \(\mathbf{A}\) has more columns than rows, making it a wide matrix. We can decompose \(\mathbf{A}\) as follows:
+
+		\[
+		\mathbf{A} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T,
+		\]
+
+		where:
+		
+		\(\mathbf{U} \in \mathbb{R}^{n \times n}\) is an orthogonal matrix,
+		
+		\(\mathbf{\Sigma} \in \mathbb{R}^{n \times p}\) is a rectangular diagonal matrix containing the singular values of \(\mathbf{A}\),
+		
+		\(\mathbf{V} \in \mathbb{R}^{p \times p}\) is an orthogonal matrix.
+
+		Calculate \(\mathbf{A}^T \mathbf{A}\) using the SVD form of \(\mathbf{A}\):
+
+		\[
+		\mathbf{A}^T \mathbf{A} = (\mathbf{U} \mathbf{\Sigma} \mathbf{V}^T)^T (\mathbf{U} \mathbf{\Sigma} \mathbf{V}^T) = \mathbf{V} \mathbf{\Sigma}^T \mathbf{U}^T \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T = \mathbf{V} \mathbf{\Sigma}^T \mathbf{\Sigma} \mathbf{V}^T.
+		\]
+
+		Since \(\mathbf{\Sigma} \in \mathbb{R}^{n \times p}\) is not square and has rank \(n\) (at most), \(\mathbf{\Sigma}^T \mathbf{\Sigma} \in \mathbb{R}^{p \times p}\) will also have rank \(n\), which is less than \(p\). This results in \(\mathbf{\Sigma}^T \mathbf{\Sigma}\) being singular, making \(\mathbf{A}^T \mathbf{A}\) singular as well.
+
+		To illustrate this, note that for a matrix product \((\mathbf{A} \mathbf{B} \mathbf{C})^{-1} = \mathbf{C}^{-1} \mathbf{B}^{-1} \mathbf{A}^{-1}\), we would ideally find:
+
+		\[
+		(\mathbf{A}^T \mathbf{A})^{-1} = (\mathbf{V} \mathbf{\Sigma}^T \mathbf{\Sigma} \mathbf{V}^T)^{-1} = \mathbf{V} (\mathbf{\Sigma}^T \mathbf{\Sigma})^{-1} \mathbf{V}^T.
+		\]
+
+		However, since \(\mathbf{\Sigma}^T \mathbf{\Sigma}\) is not invertible (due to its rank deficiency), \((\mathbf{A}^T \mathbf{A})^{-1}\) does not exist. This non-invertibility leads to the inapplicability of the vanilla solution \((\mathbf{A}^T \mathbf{A})^{-1} \mathbf{A}^T \mathbf{y}\) when \(p > n\).
+		
 		\item Let's assume $\mA=[1, 2, 4;1, 3, 5; 1, 7, 7; 1, 8, 9], \vy=[1;2;3;4]$. Please show via experiment results that Gradient Descent method will obtain the optimal solution with  Linear Convergence rate if the learning rate is fixed to be $\frac{1}{\sigma_{max}(\mA^T\mA)}$, and $\bm{\beta}_0=[0;0;0]$.	
+		
+		\textbf{Answer:}
+		In the next part (part 3), the learning rate for ridge regression is the same as the learning rate for this question (part 2) for $\lambda = 0$. Figure 3 shows the normalized objective scores as lambda is sweeped from 
+		$\lambda = [0, 0.1, 1, 10, 100, 200]$
+		As can be seen in Figure 3, the learning rates and convergence rates were highest when $\lambda = 0$.
+
 		\item Now let's consider ridge regression: $\minimize \limits_{\bm{\beta}} \frac{1}{2}\|\vy-\mA\bm{\beta}\|^2_2+\frac{\lambda}{2} \|\bm{\beta}\|^2_2$, where  $\mA,\vy,\bm{\beta}_0$ remains the same as above while learning rate is fixed to be $\frac{1}{\lambda+\sigma_{max}(\mA^T\mA)}$ where $\lambda$ varies from $0.1,1,10,100,200$, please show that Gradient Descent method with larger $\lambda$ converges faster. 
+		
+		\textbf{Answer:}
+		In Figure 3, a clear distinction is seen. As $\lambda$ increases, the learning and convergence rates decrease. This suggests that as $\lambda$ increases, there is faster convergence in shorter iterations. 
+
+		\begin{figure}[htbp]
+    		\centering
+    		\includegraphics[width=\textwidth]{figures/hw3_2.png}
+    		\caption{Object Scores vs Iterations as Lambda is Varied}
+		\label{fig:objective_func_scores}
+\end{figure}
+
+
 	\end{enumerate}
 	\newpage
 	
@@ -94,6 +183,41 @@ People have found that instead of finding optimal $\mZ$, it might be better to m
 \end{equation} 
 \begin{itemize}
 	\item Assume $[\mU,\mSigma,\mV]=svd(\mZ)$, show that if $\mA=\mU\mSigma^\frac{1}{2}, \mB=\mV\mSigma^\frac{1}{2}$, then Eq. (\ref{eq:bur}) is equivalent to Eq. (\ref{eq:nuc}).
+	
+	\textbf{Answer:}
+
+		Substitute \( \mathbf{A} \) and \( \mathbf{B} \) into \( \mathbf{Z} \):
+		\[
+		\mathbf{Z} = \mathbf{A} \mathbf{B}^T = (\mathbf{U} \mathbf{\Sigma}^{1/2})(\mathbf{V} \mathbf{\Sigma}^{1/2})^T = \mathbf{U} \mathbf{\Sigma}^{1/2} (\mathbf{\Sigma}^{1/2})^T \mathbf{V}^T = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T.
+		\]
+		This recovers the original matrix \( \mathbf{Z} = \mathbf{U} \mathbf{\Sigma} \mathbf{V}^T \), which is consistent with the requirement in Equation (1).
+
+		Since \( \mathbf{A} = \mathbf{U} \mathbf{\Sigma}^{1/2} \), we have:
+		\[
+		\| \mathbf{A} \|_F^2 = \| \mathbf{U} \mathbf{\Sigma}^{1/2} \|_F^2 = \| \mathbf{\Sigma}^{1/2} \|_F^2 = \sum_{i} \sigma_i,
+		\]
+		where \( \sigma_i \) are the singular values of \( \mathbf{Z} \). Similarly, for \( \mathbf{B} = \mathbf{V} \mathbf{\Sigma}^{1/2} \), we obtain:
+		\[
+		\| \mathbf{B} \|_F^2 = \| \mathbf{\Sigma}^{1/2} \|_F^2 = \sum_{i} \sigma_i.
+		\]
+		Therefore,
+		\[
+		\frac{\lambda}{2} \left( \| \mathbf{A} \|_F^2 + \| \mathbf{B} \|_F^2 \right) = \lambda \sum_{i} \sigma_i = \lambda \| \mathbf{Z} \|_*,
+		\]
+		which matches the norm regularization term in the original objective (Equation 1).
+
+		By substituting \( \mathbf{A} = \mathbf{U} \mathbf{\Sigma}^{1/2} \) and \( \mathbf{B} = \mathbf{V} \mathbf{\Sigma}^{1/2} \) in the new objective function:
+		\[
+		\min_{\mathbf{A}, \mathbf{B}} \frac{1}{2} \| \mathcal{P}_{\Omega}(\mathbf{X} - \mathbf{Z}) \|_F^2 + \lambda \| \mathbf{Z} \|_*,
+		\]
+		This is exactly the same as the original objective function in Equation (1).
+
+		Thus, choosing \( \mathbf{A} = \mathbf{U} \mathbf{\Sigma}^{1/2} \) and \( \mathbf{B} = \mathbf{V} \mathbf{\Sigma}^{1/2} \) in Equation (2) makes the objective function equivalent to the original objective in Equation (1), as required.
+
+
+
+
+
 	\item The \textit{Burer-Monteiro} method suggests if we can find  $\mA^*,\mB^*$, then the optimal $\mZ$ to Eq. (\ref{eq:nuc}) can be recovered by $\mA^*{\mB^*}^T$. It boils down to solve Eq. (\ref{eq:bur}). Show that we can make use of \text{least squares} with ridge regression to update $\mA, \mB$ row by row in an alternating minimization manner as below. Assume $n=d=2000, r=200$, please write program to find $\mZ^*$.
 \end{itemize}
 \begin{algorithmic}

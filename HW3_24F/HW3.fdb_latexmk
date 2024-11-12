@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1730599623.43714 "e:/CPSC 8420 Advances Machine Learning/HW3_24F/HW3.tex" "HW3.pdf" "HW3" 1730599624.11971 0
+["pdflatex"] 1731380311.67175 "e:/CPSC 8420 Advances Machine Learning/HW3_24F/HW3.tex" "HW3.pdf" "HW3" 1731380312.55701 0
   "C:/Users/Matthew/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map" 1730597802 80909 eab91d9745dd2edfd62a31d53cd5fe15 ""
   "C:/Users/Matthew/AppData/Local/MiKTeX/fonts/pk/ljfour/jknappen/ec/dpi600/tcrm1095.pk" 1730580535 12668 4f7109717ad89bf76d2bd3db4210b487 ""
   "C:/Users/Matthew/AppData/Local/MiKTeX/miktex/data/le/pdftex/pdflatex.fmt" 1728425175 11949141 eb5c7c5f845b278623433690bb0fd2ec ""
@@ -41,6 +41,7 @@
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb" 1247596666 34811 78b52f49e893bcba91bd7581cdc144c0 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1247596666 32080 340ef9bf63678554ee606688e7b5339d ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx8.pfb" 1247596666 32166 b0c356b15f19587482a9217ce1d8fa67 ""
+  "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb" 1247596667 30251 6afa5cb1d0204815a708a080681d4674 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1247596667 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb" 1247596666 37166 8ab3487cbe3ab49ebce74c29ea2418db ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1247596666 35469 dcf3a5f2fc1862f5952e3ee5eb1d98c4 ""
@@ -88,9 +89,12 @@
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/tools/xspace.sty" 1718356376 4545 e3f4de576c914e2000f07f69a891c071 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
-  "HW3.aux" 1730599623 96 7be60b0d391a1ffa9e5ab8b5bae39dbb "pdflatex"
-  "HW3.tex" 1730599615 5745 8c20344ac704c17d339eb520b840bfca ""
-  "e:/CPSC 8420 Advances Machine Learning/HW3_24F/HW3.tex" 1730599615 5745 8c20344ac704c17d339eb520b840bfca ""
+  "HW3.aux" 1731380312 685 88b54abed99d35ba0425a2cacba51efb "pdflatex"
+  "HW3.tex" 1731380311 13593 78f7fd9fc62980c1a90f220b3aea5c36 ""
+  "e:/CPSC 8420 Advances Machine Learning/HW3_24F/HW3.tex" 1731380311 13593 78f7fd9fc62980c1a90f220b3aea5c36 ""
+  "figures/hw3_1_1.png" 1731372824 1130981 7e3176beb444400295e1cf5bee382c38 ""
+  "figures/hw3_1_2.png" 1731372831 49832 48891c564e2354823c2268a584a2847b ""
+  "figures/hw3_2.png" 1731378696 102822 aabb8f7f295d6a1a7a46c4479a793d4f ""
   (generated)
   "HW3.aux"
   "HW3.log"
