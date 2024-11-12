@@ -109,6 +109,70 @@ However, this is a subjective estimation. The exact choice of components depends
 		\label{fig:variance_lena}
 \end{figure}
 
+\begin{verbatim}
+	import numpy as np
+	import matplotlib.pyplot as plt
+	from skimage import io
+
+	def recon(channel, nPC):
+		# Perform SVD
+		u, s, v = np.linalg.svd(channel, full_matrices=False)
+		# Reconstruction using nPC columns
+		picrecon = (u[:, :nPC] @ np.diag(s[:nPC]) @ v[:nPC, :])
+		return picrecon
+
+	def reconRGB(nPC):
+		R_recon = recon(R, nPC)
+		G_recon = recon(G, nPC)
+		B_recon = recon(B, nPC)
+		recon_img = np.stack((R_recon, G_recon, B_recon), axis=-1) + mean
+		return np.clip(recon_img, 0, 1)
+
+	def varPic(picArr):
+		return np.var(picArr.reshape(-1, 3), axis=0)
+
+
+	image_path = "Lenna.png"
+	original = io.imread(image_path) / 255.0 
+	pxl = original.reshape(-1, 3)
+	mean = np.mean(pxl, axis=0)
+	pxlCtr = pxl - mean
+	R = pxlCtr[:, 0].reshape(512, 512)
+	G = pxlCtr[:, 1].reshape(512, 512)
+	B = pxlCtr[:, 2].reshape(512, 512)
+
+	VarOrig = varPic(original)
+	percentVar_R = []
+	percentVar_G = []
+	percentVar_B = []
+	nPC_values = [2, 5, 20, 50, 80, 100]
+	fig, axes = plt.subplots(2, 3, figsize=(15, 10))
+
+	for ax, nPC in zip(axes.flat, nPC_values):
+		recon_img = reconRGB(nPC)
+		ax.imshow(recon_img)
+		ax.set_title(f"{nPC} Principal Components")
+		ax.axis('off')
+		variance_retained = varPic(recon_img) / VarOrig
+		percentVar_R.append(variance_retained[0])
+		percentVar_G.append(variance_retained[1])
+		percentVar_B.append(variance_retained[2])
+
+	plt.suptitle("PCA Reconstructions with Different Numbers of Principal Components")
+	plt.show()
+
+	plt.figure(figsize=(8, 6))
+	plt.plot(nPC_values, percentVar_R, color='red', marker='o', label='Red Channel')
+	plt.plot(nPC_values, percentVar_G, color='green', marker='o', label='Green Channel')
+	plt.plot(nPC_values, percentVar_B, color='blue', marker='o', label='Blue Channel')
+	plt.xlabel("Number of Principal Components")
+	plt.ylabel("Variance Retained (%)")
+	plt.title("Variance Retained Across Principal Components by Channel")
+	plt.legend()
+	plt.grid(True)
+	plt.show()
+\end{verbatim}
+
 	
 		\newpage
 	\section*{Problem 2}
@@ -168,8 +232,64 @@ However, this is a subjective estimation. The exact choice of components depends
 		\label{fig:objective_func_scores}
 \end{figure}
 
-
 	\end{enumerate}
+	\begin{verbatim}
+		import numpy as np
+		import matplotlib.pyplot as plt
+		import scipy.linalg as sl
+		
+		def cost_function(X, y, theta, reg_param):
+			return ((X.dot(theta) - y).T.dot(X.dot(theta) - y) + reg_param * theta.T.dot(theta))[0][0] / 2
+		
+		def gradient(X, y, theta, reg_param):
+			return X.T.dot(X.dot(theta) - y) + reg_param * theta
+		
+		def gradient_descent(cost_fn, grad_fn, X, y, init_theta, reg_param, step_size, tolerance):
+			theta = init_theta
+			iteration = 0
+			delta = np.inf
+			cost_history = [cost_fn(X, y, init_theta, reg_param)]
+			while delta > tolerance:
+				theta = theta - step_size * grad_fn(X, y, theta, reg_param)
+				iteration += 1
+				cost_history.append(cost_fn(X, y, theta, reg_param))
+				delta = abs((cost_history[-1] - cost_history[-2]) / cost_history[-1])
+			return iteration, theta, cost_history[1:]
+		
+		X = np.array([[1, 2, 4], [1, 3, 5], [1, 7, 7], [1, 8, 9]])
+		y = np.array([[1], [2], [3], [4]])
+		
+		tolerance = 1e-4
+		theta_init = np.zeros((3, 1))  
+		regularization_params = [0, 0.1, 1, 10, 100, 200]  
+		iterations_list = []  
+		learning_rates = []  
+		cost_values = []  
+		convergence_ratios = []  
+		
+		for reg_param in regularization_params:
+			step_size = 1 / (np.max(sl.svd(X.T.dot(X))[1]) + reg_param)
+			iteration, _, cost_hist = gradient_descent(cost_function, gradient, X, y, theta_init, reg_param, step_size, tolerance)
+			iterations_list.append(iteration)
+			learning_rates.append(step_size)
+			cost_values.append(cost_hist)
+			_, singular_values, _ = sl.svd(X.T.dot(X) + reg_param * np.identity(3))
+			convergence_ratios.append(1 - np.min(singular_values) / np.max(singular_values))
+		
+		cost_values = [cost_hist / cost_hist[0] for cost_hist in cost_values]
+		
+		plt.figure(figsize=(14, 8))
+		for reg_param, iteration, cost_hist, lr, cr in zip(regularization_params, iterations_list, cost_values, learning_rates, convergence_ratios):
+			plt.plot(np.arange(1, iteration + 1), cost_hist, 
+					 label=fr'Step Size = $\frac{{1}}{{{reg_param} + \sigma_{{\max}}(X^T X)}}$ = {lr:.5e}; CR = {cr:.4f}')
+		plt.xscale('log')
+		plt.legend(frameon=False, fontsize=12)
+		plt.xlabel('Number of Iterations', fontsize=14)
+		plt.ylabel('Normalized Cost Function Values', fontsize=14)
+		plt.title("Convergence of Gradient Descent with Various Regularization Parameters")
+		plt.grid(True)
+		plt.show()
+	\end{verbatim}	
 	\newpage
 	
 	\section*{Problem 3}
@@ -213,20 +333,85 @@ People have found that instead of finding optimal $\mZ$, it might be better to m
 		This is exactly the same as the original objective function in Equation (1).
 
 		Thus, choosing \( \mathbf{A} = \mathbf{U} \mathbf{\Sigma}^{1/2} \) and \( \mathbf{B} = \mathbf{V} \mathbf{\Sigma}^{1/2} \) in Equation (2) makes the objective function equivalent to the original objective in Equation (1), as required.
+		\item The \textit{Burer-Monteiro} method suggests if we can find  $\mA^*,\mB^*$, then the optimal $\mZ$ to Eq. (\ref{eq:nuc}) can be recovered by $\mA^*{\mB^*}^T$. It boils down to solve Eq. (\ref{eq:bur}). Show that we can make use of \text{least squares} with ridge regression to update $\mA, \mB$ row by row in an alternating minimization manner as below. Assume $n=d=2000, r=200$, please write program to find $\mZ^*$.
+	\begin{algorithmic}
+		\State $T \gets 100, i\gets 1$ \ \% \textcolor{blue}{you can also set T to be other number instead of 100}
+		\If{$i\leq T$} 
+			\State $update \ A \ row \ by \ row \ while \ fixing \ B$
+			\State $update \ B \ row \ by \ row \ while \ fixing \ A$
+			\State $i \gets i+1$
+		%\EndIf
+		\EndIf 
+	\end{algorithmic}
+	\end{itemize}
+
+	\textbf{Answer: }
+
+	Figure 4 shows the results of a python code that implements the \textit{Burer-Monteiro method} using an alternating minimization approach with ridge regression to find an approximate low-rank solution \( \mathbf{Z}^* = \mathbf{A} \mathbf{B}^T \) that closely matches a target matrix \( \mathbf{X} \). 
+	The code alternates between updating each row of matrices \( \mathbf{A} \) and \( \mathbf{B} \) using ridge regression, iteratively reducing the approximation error until the solution converges.
+	After the algorithm reaches the maximum number of iterations, the final approximation \( \mathbf{Z}^* = \mathbf{A} \mathbf{B}^T \) is computed. The code then calculates and prints the final relative approximation error between \( \mathbf{X} \) and \( \mathbf{Z}^* \), giving a measure of how well \( \mathbf{Z}^* \) approximates \( \mathbf{X} \).
+	Figure 4 shows, the Forbenius Error between the approximated Z and ground truth X. After 100 iterations, the algorithm predicts a Z that aproximately equal to the ground truth. 
 
 
+	\begin{verbatim}
+		import numpy as np
+		from sklearn.linear_model import Ridge
+		import matplotlib.pyplot as plt
+		
+		n, d, r = 2000, 2000, 200  
+		T = 100 
+		lambda_ridge = 0.001  
+		tolerance = 1e-6  
+		np.random.seed(0)  
+		
+		A = np.random.randn(n, r) * 0.01 
+		B = np.random.randn(d, r) * 0.01
+		# Ground truth matrix X
+		X = A @ B.T  
+		
+		def update_A(A, B, X, lambda_ridge):
+			for i in range(n):
+				ridge_reg = Ridge(alpha=lambda_ridge, fit_intercept=False)
+				ridge_reg.fit(B, X[i, :])  
+				A[i, :] = ridge_reg.coef_  
+			return A
+		
+		def update_B(A, B, X, lambda_ridge):
+			for j in range(d):
+				ridge_reg = Ridge(alpha=lambda_ridge, fit_intercept=False)
+				ridge_reg.fit(A, X[:, j])  
+				B[j, :] = ridge_reg.coef_  
+			return B
+		
+		frob_errors = []
+		prev_error = None  
+		
+		for t in range(T):
+			A = update_A(A, B, X, lambda_ridge)
+			B = update_B(A, B, X, lambda_ridge)
+			Z_current = A @ B.T
+			frobenius_error = np.linalg.norm(X - Z_current, 'fro') / np.linalg.norm(X, 'fro')
+			frob_errors.append(frobenius_error)
+			print(f"Iteration {t + 1}, Frobenius error: {frobenius_error:.6f}")
+			
+		Z_star = A @ B.T
+		print("Approximate solution Z* has been found.")
+		
+		plt.figure(figsize=(10, 6))
+		plt.plot(range(1, len(frob_errors) + 1), frob_errors, marker='o', color='b')
+		plt.xlabel('Iteration')
+		plt.ylabel('Relative Frobenius Error')
+		plt.title('Convergence of Frobenius Error Between X and Z*')
+		plt.grid(True)
+		plt.show()
+		
+	\end{verbatim}
 
+\begin{figure}[htbp]
+	\centering
+	\includegraphics[width=\textwidth]{figures/hw3_3.png}
+	\caption{Z* Approximation}
+\label{fig:objective_func_scores}
+\end{figure}
 
-
-	\item The \textit{Burer-Monteiro} method suggests if we can find  $\mA^*,\mB^*$, then the optimal $\mZ$ to Eq. (\ref{eq:nuc}) can be recovered by $\mA^*{\mB^*}^T$. It boils down to solve Eq. (\ref{eq:bur}). Show that we can make use of \text{least squares} with ridge regression to update $\mA, \mB$ row by row in an alternating minimization manner as below. Assume $n=d=2000, r=200$, please write program to find $\mZ^*$.
-\end{itemize}
-\begin{algorithmic}
-	\State $T \gets 100, i\gets 1$ \ \% \textcolor{blue}{you can also set T to be other number instead of 100}
-	\If{$i\leq T$} 
-	\State $update \ A \ row \ by \ row \ while \ fixing \ B$
-	\State $update \ B \ row \ by \ row \ while \ fixing \ A$
-	\State $i \gets i+1$
-	%\EndIf
-	\EndIf 
-\end{algorithmic}
 \end{document}
