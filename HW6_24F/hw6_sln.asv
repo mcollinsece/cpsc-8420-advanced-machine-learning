@@ -1,0 +1,39 @@
+clear all
+close all
+clc
+
+% Store dataset file names and their corresponding data variable names
+datasets = {'text.mat', 'concentric.mat', 'links.mat', 'rectangles.mat'};
+data_vars = {'X4', 'X1', 'X3', 'X2'}; % Replace with the actual variable names from the .mat files
+
+% Loop through each dataset
+for i = 1:length(datasets)
+    % Load the dataset
+    load(datasets{i}); % Load the current dataset
+    
+    % Extract the corresponding variable
+    var_name = data_vars{i};
+    if exist(var_name, 'var') % Check if the variable exists in the dataset
+        data = eval(var_name); % Dynamically retrieve the variable
+    else
+        error(['Dataset ', datasets{i}, ' does not contain variable ', var_name]);
+    end
+    
+    % Determine k for clustering
+    if strcmp(datasets{i}, 'text.mat')
+        k = 6; % Use k = 6 for text.mat
+    else
+        k = 2; % Use k = 2 for all other datasets
+    end
+
+    % Perform k-means clustering
+    [idx, ~] = kmeans(data, k);
+    
+    % Visualize the clustering results
+  
+    plotClusters(data, idx);
+    title(['Clustering Results for ', datasets{i}]);
+    
+    % Clear variables for the next iteration
+    clear data;
+end
