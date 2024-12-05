@@ -1,0 +1,151 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amsbsy,amssymb,verbatim,fullpage,ifthen,graphicx,bm,amsfonts,amsthm,url}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\newcommand{\mfile}[1]  {{\small \verbatiminput{./#1}}} % Jeff Fessler, input matlab file
+\newcommand{\tmop}[1]{\ensuremath{\operatorname{#1}}}
+%\newcommand*{\qed}{\hfill\ensuremath{\blacksquare}}%
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\A}{\mathcal{A}}
+\newcommand{\minimize}{\operatorname*{minimize\ }}
+\newcommand{\maximize}{\operatorname*{maximize}}
+\newcommand{\opdet}[1]{\operatorname{\textbf{det}}\left(#1\right)}
+\newcommand{\optr}[1]{\operatorname{\textbf{tr}}\left(#1\right)}
+\newcommand{\mtx}[1]{\mathbf{#1}}
+\newcommand{\vct}[1]{\mathbf{#1}}
+\def \lg       {\langle}
+\def \rg       {\rangle}
+\def \mA {\mtx{A}}
+\def \mB {\mtx{B}}
+\def \mD {\mtx{D}}
+\def \mE {\mtx{E}}
+\def \mF {\mtx{F}}
+\def \mG {\mtx{G}}
+\def \mI {\mtx{I}}
+\def \mJ {\mtx{J}}
+\def \mL {\mtx{L}}
+\def \mU {\mtx{U}}
+\def \mS {\mtx{S}}
+\def \mV {\mtx{V}}
+\def \mW {\mtx{W}}
+\def \mLambda {\mtx{\Lambda}}
+\def \mSigma {\mtx{\Sigma}}
+\def \mX {\mtx{X}}
+\def \mY {\mtx{Y}}
+\def \mZ {\mtx{Z}}
+\def \zero     {\mathbf{0}}
+\def \vzero    {\vct{0}}
+\def \vone    {\vct{1}}
+\def \va {\vct{a}}
+\def \vg {\vct{g}}
+\def \vm {\vct{m}}
+\def \vu {\vct{u}}
+\def \vv {\vct{v}}
+\def \vw {\vct{w}}
+\def \vx {\vct{x}}
+\def \vy {\vct{y}}
+\def \vz {\vct{z}}
+\def \vphi {\vct{\phi}}
+\def \vmu {\vct{\mu}}
+\def \R {\mathbb{R}}
+
+%\newcommand{\st}{\operatorname*{\ subject\ to\ }}
+\usepackage{algorithm,algpseudocode}
+\usepackage{xspace}
+\usepackage{hyperref}
+% Add a period to the end of an abbreviation unless there's one
+% already, then \xspace.
+\makeatletter
+\DeclareRobustCommand\onedot{\futurelet\@let@token\@onedot}
+\def\@onedot{\ifx\@let@token.\else.\null\fi\xspace}
+
+\def\eg{\emph{e.g}\onedot} \def\Eg{\emph{E.g}\onedot}
+\def\ie{\emph{i.e}\onedot} \def\Ie{\emph{I.e}\onedot}
+\def\cf{\emph{c.f}\onedot} \def\Cf{\emph{C.f}\onedot}
+\def\etc{\emph{etc}\onedot} \def\vs{\emph{vs}\onedot}
+\def\wrt{w.r.t\onedot} \def\dof{d.o.f\onedot}
+\def\etal{\emph{et al}\onedot} \def\st{\emph{s.t}\onedot}
+\pagestyle{plain}
+
+\title{{\bf Final Exam, CPSC 8420, Fall 2024}} 
+\author{\Large\underline{Last Name, First Name}}% put your name in the LastName, FirstName format
+\date{\textbf{\Large\textcolor{red}{Due 12/12/2024, Thursday, 5:59PM EST}}} 
+%\date{\today}
+
+\begin{document}
+\maketitle
+
+\section*{Problem 1 [15 pts]}
+Consider the following problem:
+\begin{equation}
+\min_{\beta} \frac{1}{2}\|\vy-\mX\beta\|^2_2+\lambda\|\beta\|_1.
+\end{equation}
+\begin{enumerate}
+	\item Prove that if $\lambda\ge\|\mX^T\vy\|_\infty$, then $\beta^*=0$. 
+	\item To validate the corretness of the conclusion above, let's find the optimal solution manually via experiment. As $\beta$ is a vector consisting of various elements $\beta[1],\beta[2],\dots,\beta[-1]$, one of the most popular methods to find the optimal solution is so called `coordinate descent' which minimizes a certain coordinate while fixing the rest. For example, we can first fix the rest while optimizing $\beta[1]$, then fix the rest to optimize $\beta[2]$, till $\beta[-1]$. By repeating the process until convergence, the optimal solution will be obtained. Please generate $\lambda\ge\|\mX^T\vy\|_\infty$ and make use of coordinate descent method described above to obtain the optimal $\beta$. It should be a zero vector (or very close to $0$ due to machine precision issue).
+\end{enumerate}
+
+\newpage
+\section*{Problem 2 [10 pts]}
+\begin{itemize}
+	\item For any matrix with SVD decomposition $X=U\Sigma V^T$, define $\|X\|_2=\Sigma(1,1), \|X\|_F=\sqrt{\sum_i\sum_j |x_{ij}|^2}$. Prove that $\|X\|_F\ge \|X\|_2$ and indicate when the equality holds.
+	\item Use the fact that $vec(\mA\mX\mB)=(\mB^T\otimes\mA)vec(\mX)$ to find the best solution to $\min\limits_{\mX} \|\mA\mX\mB-\mY\|_F^2$, where $\mA\in\R^{m\times p}, \mX\in\R^{p\times q}, \mB\in\R^{q\times n}, \mY\in\R^{m\times n}$.
+\end{itemize}
+
+
+\newpage
+
+\section*{Problem 3 [25 pts]}
+Please find \textit{USArrests} dataset online and 
+\begin{itemize}
+	\item Implement your own program to reproduce the image on page 16/26 of `PCA' slides on Canvas (if yours is flipped up and down, (or) left and right from the slide, it is totally Okay).
+	\item For each state, out of 4 features, randomly mask one and assume it is missing (therefore you have your own $\Omega$ and $X$). Please write a program following what we discussed in class (you may refer to ProximalGradientDescent.pdf on Canvas) to optimize  
+		\begin{equation}
+		\min_{Z} \frac{1}{2}\|P_\Omega(X-Z)\|_F^2+\|Z\|_*,
+	\end{equation}
+	and plot the objective vs. iteration to demonstrate the algorithm will decrease the function.
+\end{itemize}
+
+
+\newpage
+
+\section*{Problem 4 [15 pts]}
+Please reproduce Figure (14.29) in \href{https://hastie.su.domains/ElemStatLearn/}{The Elements of
+	Statistical Learning} with your own codes. You are NOT allowed to call `spectral clustering' function built-in python or matlab. 
+\newpage
+\section*{Problem 5 [20 pts]}
+For Logistic Regression, assume each data $\vx_i\in\R^{100}$. If the label is $\pm1$,  the objective is:
+\begin{equation}
+\min_\vw	\sum_{i=1}^{m}\log(1+\exp(-y_i\vw^T\vx_i))
+\end{equation}
+while if the label is $\{1,0\}$ the objective is:
+\begin{equation}
+	\min_\vw	\sum_{i=1}^{m}\log(1+\exp(\vw^T\vx_i))-y_i\vw^T\vx_i
+\end{equation}
+\begin{itemize}
+	\item Write a program to show that the optimal solutions to the two cases  are the same by making use of gradient descent method where $m=100$ (please carefully choose the stepsize as we discussed in class). You can generate two class samples, one class's label is 1 and the other is -1 or 0 corresponding to the two formulations respectively. You can initialize $\vw$ as $\vzero$.
+	\item Consider the case where class label is $\{1,0\}$ and $P(y=1|\vx,\vw)=\frac{1}{1+\exp(-\vw^T\vx)}$, the maximum likelihood function is $p^y(1-p)^{1-y}$. Please prove optimal $p^*=y$. If we use Mean Square Error instead of cross entropy: $\min\limits_p \frac{1}{2}(y-p)^2$, and assume groundtruth $y=1$ and our initial guess weight $\vw$ result in $p$ very close to 0, if we optimize this objective by making use of gradient descent method, what will happen? Please explain why.
+	\item For the second objective where the label is $\{1,0\}$, implement Newton method (with unit stepsize) where $m=100$.  Compare with gradient descent method (constant stepsize) and plot objective versus \textbf{iteration} in one figure.
+	\item Still consider the second formulation. Please write a stochastic gradient descent version (you may set the stepsize as $1/(t+1)$ where $t=0,1,2,\dots$) and compare those two methods (gradient descent vs. stochastic gradient descent) for $m=[100000,10000,1000,100]$ by plotting objective changes versus \textbf{time consumption} respectively.
+\end{itemize}
+
+\newpage
+\section*{Problem 6 [15 pts]}
+In class, we discussed Kernel SVM, we said there are many options for the kernel, such as linear, polynoimal, Gaussian, etc.
+\begin{itemize}
+	\item Show that if $K(i,j)=\frac{\langle \vx_i,\vx_j\rangle}{\|\vx_i\|_2\|\vx_j\|_2}$, then $K$ defines a proper kernel.
+	\item We define $K=K_1+K_2$ where $K_1$ is Gaussian Kernel ($\gamma=1$) and $K_2$ is linear Kernel. Assume we are to train SVM on \href{https://en.wikipedia.org/wiki/Iris_flower_data_set}{iris} dataset using the kernel defined above ($K$). Since there are 3 classes, we need train 3 hyperplanes (one vs. one). Please determine how many support vectors for each of the 3 SVMs. (You can use quadratic programming solvers in Matlab or Python at your convinience)
+\end{itemize}
+\newpage
+\section*{Problem 7 [10 pts]}
+\begin{itemize}
+	\item Please tell me your favorite book, favorite travel destination and why.
+	\item Please tell me the person who influences you most and why.
+	\item Please tell me your favorite restaurant and dishes you order.
+	\item Please tell me your favorite (or least favorite) part of this class.
+	\item Please tell me your favorite machine learning algorithm(s) we discussed in class and why.
+\end{itemize}
+\end{document}
