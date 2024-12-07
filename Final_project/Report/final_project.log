@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  6 DEC 2024 22:36
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (MiKTeX 24.4) (preloaded format=pdflatex 2024.10.8)  6 DEC 2024 22:59
 entering extended mode
  restricted \write18 enabled.
  file:line:error style messages enabled.
@@ -531,51 +531,54 @@ Underfull \vbox (badness 7081) has occurred while \output is active []
 {C:/Users/Matthew/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map}{C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/base/8r.enc}]
 
 [2]
-<../figures/confusion_matrix_pre_gridSearch.png, id=57, 435.0654pt x 312.6882pt>
-File: ../figures/confusion_matrix_pre_gridSearch.png Graphic file (type png)
-<use ../figures/confusion_matrix_pre_gridSearch.png>
-Package pdftex.def Info: ../figures/confusion_matrix_pre_gridSearch.png  used on input line 129.
-(pdftex.def)             Requested size: 278.23827pt x 199.97185pt.
-<../figures/confusion_matrix_post_gridSearch.png, id=59, 435.0654pt x 312.6882pt>
-File: ../figures/confusion_matrix_post_gridSearch.png Graphic file (type png)
-<use ../figures/confusion_matrix_post_gridSearch.png>
-Package pdftex.def Info: ../figures/confusion_matrix_post_gridSearch.png  used on input line 136.
-(pdftex.def)             Requested size: 278.23827pt x 199.97185pt.
-
-Underfull \vbox (badness 4205) has occurred while \output is active []
-
-
-
-[3 <../figures/confusion_matrix_pre_gridSearch.png>]
-Overfull \hbox (40.27457pt too wide) in paragraph at lines 145--153
- [][] 
- []
-
-<../figures/scree_plot.png, id=69, 406.6392pt x 310.761pt>
-File: ../figures/scree_plot.png Graphic file (type png)
-<use ../figures/scree_plot.png>
-Package pdftex.def Info: ../figures/scree_plot.png  used on input line 157.
-(pdftex.def)             Requested size: 278.23827pt x 212.63765pt.
-<../figures/decision_surface_pca.png, id=70, 608.2725pt x 617.1858pt>
-File: ../figures/decision_surface_pca.png Graphic file (type png)
-<use ../figures/decision_surface_pca.png>
-Package pdftex.def Info: ../figures/decision_surface_pca.png  used on input line 164.
-(pdftex.def)             Requested size: 278.23827pt x 282.31735pt.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[4 <../figures/confusion_matrix_post_gridSearch.png> <../figures/scree_plot.png>]
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
-
-
-[5 <../figures/decision_surface_pca.png>]
-LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 191.
+LaTeX Font Info:    Trying to load font information for TS1+ptm on input line 130.
  (C:\Users\Matthew\AppData\Local\Programs\MiKTeX\tex/latex/psnfss\ts1ptm.fd
 File: ts1ptm.fd 2001/06/04 font definitions for TS1/ptm.
 )
+<../figures/confusion_matrix_pre_gridSearch.png, id=55, 435.0654pt x 312.6882pt>
+File: ../figures/confusion_matrix_pre_gridSearch.png Graphic file (type png)
+<use ../figures/confusion_matrix_pre_gridSearch.png>
+Package pdftex.def Info: ../figures/confusion_matrix_pre_gridSearch.png  used on input line 161.
+(pdftex.def)             Requested size: 278.23827pt x 199.97185pt.
+
+
+[3]
+<../figures/confusion_matrix_post_gridSearch.png, id=65, 435.0654pt x 312.6882pt>
+File: ../figures/confusion_matrix_post_gridSearch.png Graphic file (type png)
+<use ../figures/confusion_matrix_post_gridSearch.png>
+Package pdftex.def Info: ../figures/confusion_matrix_post_gridSearch.png  used on input line 168.
+(pdftex.def)             Requested size: 278.23827pt x 199.97185pt.
+
+Overfull \hbox (40.27457pt too wide) in paragraph at lines 177--185
+ [][] 
+ []
+
+<../figures/scree_plot.png, id=66, 406.6392pt x 310.761pt>
+File: ../figures/scree_plot.png Graphic file (type png)
+<use ../figures/scree_plot.png>
+Package pdftex.def Info: ../figures/scree_plot.png  used on input line 189.
+(pdftex.def)             Requested size: 278.23827pt x 212.63765pt.
+
+
+[4 <../figures/confusion_matrix_pre_gridSearch.png> <../figures/confusion_matrix_post_gridSearch.png>]
+<../figures/decision_surface_pca.png, id=77, 608.2725pt x 617.1858pt>
+File: ../figures/decision_surface_pca.png Graphic file (type png)
+<use ../figures/decision_surface_pca.png>
+Package pdftex.def Info: ../figures/decision_surface_pca.png  used on input line 196.
+(pdftex.def)             Requested size: 278.23827pt x 282.31735pt.
+
+
+[5 <../figures/scree_plot.png> <../figures/decision_surface_pca.png>]
+Underfull \hbox (badness 2698) in paragraph at lines 223--224
+[]\T1/ptm/m/n/10 (+20) Agarwal, A. (2023). Ev-ery-thing About SVM Clas-si-fi-ca-tion: Above and Be-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 224--225
+\T1/ptm/m/n/10 (+20) Avail-able at []$\T1/cmtt/m/n/10 https : / / medium . com / low-[]code-[]for-[]advanced-[]data-[]science /
+ []
+
+
 
 [6] (final_project.aux)
  ***********
@@ -586,17 +589,17 @@ Package rerunfilecheck Info: File `final_project.out' has not changed.
 (rerunfilecheck)             Checksum: B274E20A0A16A162E30C7934CE931711;543.
  ) 
 Here is how much of TeX's memory you used:
- 13729 strings out of 473899
- 217970 string characters out of 5725556
+ 13753 strings out of 473899
+ 218326 string characters out of 5725556
  658500 words of memory out of 5000000
- 36219 multiletter control sequences out of 15000+600000
- 596582 words of font info for 165 fonts, out of 8000000 for 9000
+ 36233 multiletter control sequences out of 15000+600000
+ 598412 words of font info for 171 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 72i,9n,79p,1072b,471s stack positions out of 10000i,1000n,20000p,200000b,200000s
- <C:\Users\Matthew\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
-Output written on final_project.pdf (6 pages, 1334122 bytes).
+ 72i,9n,79p,1072b,487s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ <C:\Users\Matthew\AppData\Local\MiKTeX\fonts/pk/ljfour/jknappen/ec/dpi600\ectt1000.pk><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmex10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy7.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/symbols/msbm10.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/helvetic/uhvr8a.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmb8a.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmr8a.pfb><C:/Users/Matthew/AppData/Local/Programs/MiKTeX/fonts/type1/urw/times/utmri8a.pfb>
+Output written on final_project.pdf (6 pages, 1357728 bytes).
 PDF statistics:
- 204 PDF objects out of 1000 (max. 8388607)
- 20 named destinations out of 1000 (max. 500000)
+ 227 PDF objects out of 1000 (max. 8388607)
+ 24 named destinations out of 1000 (max. 500000)
  46661 words of extra memory for PDF output out of 51595 (max. 10000000)
 

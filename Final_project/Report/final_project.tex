@@ -81,43 +81,75 @@ These transformations addressed the challenges posed by mixed feature types, cla
 
 
 \section{Methodology}
-After preprocessing the dataset to address class imbalance and ensure numerical compatibility, the project proceeded with training a preliminary Support Vector Machine (SVM) using the radial basis function (RBF) kernel. 
-The choice of the RBF kernel for initial experimentation was motivated by its capability to map input features into higher-dimensional spaces, enabling it to capture complex, nonlinear decision boundaries. 
-The initial model utilized default hyperparameters, with the regularization parameter \(C = 1\) and kernel coefficient \(\gamma = \frac{1}{\text{number of features}}\), to establish a baseline performance. 
-Model evaluation involved generating confusion matrices, as shown in Figure~\ref{fig:confusion-pre-grid}, and calculating accuracy scores.
-
-The SVM optimization process centered around hyperparameter tuning using grid search cross-validation. The grid search method systematically evaluates combinations of \(C\) and \(\gamma\) values to identify the optimal 
-hyperparameters that maximize classification performance. The regularization parameter \(C\) controls the trade off between achieving a low training error and maintaining a large margin. The SVM optimization problem is expressed as:
+The Support Vector Machine (SVM) algorithm aims to find an optimal hyperplane that maximizes the margin between two classes while minimizing classification errors. For a training dataset with n points $\{(\mathbf{x}_i, y_i)\}_{i=1}^n$ where $\mathbf{x}_i \in \mathbb{R}^d$ and $y_i \in \{-1, 1\}$, the primal optimization problem is formulated as:
 
 \[
-\min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i,
+\min_{\mathbf{w}, b, \xi} \frac{1}{2} \|\mathbf{w}\|^2 + C \sum_{i=1}^n \xi_i
+\]
+
+subject to the constraints:
+\[
+y_i(\mathbf{w}^\top\mathbf{x}_i + b) \geq 1 - \xi_i, \quad \xi_i \geq 0, \quad i = 1,\ldots,n
+\]
+
+where $\mathbf{w}$ is the normal vector to the hyperplane, $b$ is the bias term, $\xi_i$ are slack variables allowing for soft margin violations, and $C$ is the regularization parameter controlling the trade-off between margin maximization and error minimization.
+
+The dual formulation of this optimization problem, derived using Lagrange multipliers, is:
+
+\[
+\max_{\boldsymbol{\alpha}} \sum_{i=1}^n \alpha_i - \frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n \alpha_i\alpha_j y_i y_j \mathbf{x}_i^\top\mathbf{x}_j
 \]
 
 subject to:
-
 \[
-y_i (\mathbf{w}^\top \phi(\mathbf{x}_i) + b) \geq 1 - \xi_i, \quad \xi_i \geq 0, \quad i = 1, \dots, n,
+0 \leq \alpha_i \leq C, \quad i = 1,\ldots,n \quad \text{and} \quad \sum_{i=1}^n \alpha_i y_i = 0
 \]
 
-where \(\mathbf{w}\) is the weight vector, \(b\) is the bias, \(\xi_i\) are slack variables allowing soft margin violations, and \(\phi(\mathbf{x}_i)\) represents the transformation of input features into a higher-dimensional space. 
-The kernel coefficient \(\gamma\) determines the influence of individual training points, effectively controlling the curvature of the decision boundary in the feature space. The post-optimization confusion matrix, 
-which demonstrates improved performance, is shown in Figure~\ref{fig:confusion-post-grid}.
-
-To provide a comprehensive analysis, four kernel functions—linear, polynomial, RBF, and sigmoid—were evaluated. Each kernel was optimized using grid search to determine its best performing hyperparameters. 
-The linear kernel assumes a straight-line decision boundary and is suitable for datasets that are linearly separable. 
-
-Performance metrics, including accuracy, precision, recall, F1-score, and runtime, were recorded for each kernel to evaluate their suitability for the credit card default prediction task. The accuracy of the SVM models was calculated as:
+To handle nonlinear classification problems, kernel functions $K(\mathbf{x}_i, \mathbf{x}_j)$ are introduced to implicitly map the input features into a higher-dimensional space. The kernel trick transforms the dual optimization problem to:
 
 \[
-\text{Accuracy} = \frac{\text{TP} + \text{TN}}{\text{TP} + \text{TN} + \text{FP} + \text{FN}},
+\max_{\boldsymbol{\alpha}} \sum_{i=1}^n \alpha_i - \frac{1}{2}\sum_{i=1}^n\sum_{j=1}^n \alpha_i\alpha_j y_i y_j K(\mathbf{x}_i, \mathbf{x}_j)
 \]
 
-where \(\text{TP}\), \(\text{TN}\), \(\text{FP}\), and \(\text{FN}\) represent true positives, true negatives, false positives, and false negatives, respectively. Precision, recall, 
-and F1-score were also computed to provide a more detailed assessment of the models' performance in handling class imbalance.
+In this project, four kernel functions were evaluated:
+\begin{enumerate}
+    \item Linear: $K(\mathbf{x}_i, \mathbf{x}_j) = \mathbf{x}_i^\top\mathbf{x}_j$
+    \item Polynomial: $K(\mathbf{x}_i, \mathbf{x}_j) = (\gamma\mathbf{x}_i^\top\mathbf{x}_j + r)^d$
+    \item RBF (Gaussian): $K(\mathbf{x}_i, \mathbf{x}_j) = \exp(-\gamma\|\mathbf{x}_i - \mathbf{x}_j\|^2)$
+    \item Sigmoid: $K(\mathbf{x}_i, \mathbf{x}_j) = \tanh(\gamma\mathbf{x}_i^\top\mathbf{x}_j + r)$
+\end{enumerate}
 
-To facilitate visualization and interpretability, Principal Component Analysis (PCA) was employed to reduce the feature space to two dimensions. PCA identifies orthogonal directions, or principal components, 
-that capture the maximum variance in the dataset. The decision boundary for each kernel, projected onto the first two principal components, is illustrated in Figure~\ref{fig:decision-surface}. 
-The PCA transformed decision boundary provides a visual representation of the separability between defaulting and non-defaulting clients.
+The decision function for classifying new points becomes:
+
+\[
+f(\mathbf{x}) = \text{sign}\left(\sum_{i=1}^n \alpha_i y_i K(\mathbf{x}_i, \mathbf{x}) + b\right)
+\]
+
+Grid search cross-validation was employed to optimize the hyperparameters $C$ and $\gamma$ for each kernel. The search space included:
+\begin{itemize}
+    \item $C \in \{0.1, 1, 10, 100\}$
+    \item $\gamma \in \{0.001, 0.01, 0.1, 1\}$
+\end{itemize}
+
+To facilitate visualization and interpretation, Principal Component Analysis (PCA) was applied to reduce the feature space to two dimensions. Given the centered data matrix $\mathbf{X} \in \mathbb{R}^{n \times d}$, where $n$ is the number of samples and $d$ is the number of features, PCA first computes the covariance matrix:
+
+\[
+\mathbf{\Sigma} = \frac{1}{n}\mathbf{X}^\top\mathbf{X}
+\]
+
+PCA then performs eigendecomposition of the covariance matrix:
+
+\[
+\mathbf{\Sigma} = \mathbf{V}\boldsymbol{\Lambda}\mathbf{V}^\top
+\]
+
+where $\mathbf{V} \in \mathbb{R}^{d \times d}$ contains the eigenvectors as columns (sorted by decreasing eigenvalues) and $\boldsymbol{\Lambda} = \text{diag}(\lambda_1, \ldots, \lambda_d)$ contains the corresponding eigenvalues. The transformed features are obtained by projecting the data onto the first two principal components:
+
+\[
+\mathbf{X}_{\text{transformed}} = \mathbf{X}\mathbf{V}_{1:2}
+\]
+
+where $\mathbf{V}_{1:2} \in \mathbb{R}^{d \times 2}$ contains the first two eigenvectors. This projection preserves the maximum possible variance in the data while reducing dimensionality to facilitate visualization of the decision boundaries.
 
 
 \section{Results}
@@ -188,9 +220,10 @@ underscores the need for exploring alternative machine learning models and techn
 
 \section*{References}
 \begin{itemize}
-    \item Chang, C. and Lin, C. (2011). LIBSVM: A library for support vector machines. \textit{ACM Transactions on Intelligent Systems and Technology}, 2(3), 27.
-    \item UCI Machine Learning Repository: Default of Credit Card Clients Dataset. Available at \url{https://archive.ics.uci.edu/ml/datasets/default+of+credit+card+clients}.
-    \item Cortes, C., and Vapnik, V. (1995). Support-Vector Networks. \textit{Machine Learning}, 20(3), 273–297.
+    \item Agarwal, A. (2023). Everything About SVM Classification: Above and Beyond. \textit{Towards Data Science}. Available at \url{https://towardsdatascience.com/everything-about-svm-classification-above-and-beyond-cc665bfd993e}.
+    \item Bhatia, N. (2023). Support Vector Machines (SVM): An Intuitive Explanation. \textit{Medium}. Available at \url{https://medium.com/low-code-for-advanced-data-science/support-vector-machines-svm-an-intuitive-explanation-b084d6238106}.
+    \item Liu, K. (2024). Support Vector Machines [SVM.pdf]. CPSC 8420 Advanced Machine Learning, Clemson University.
+    \item Liu, K. (2024). Principal Component Analysis [PCA.pdf]. CPSC 8420 Advanced Machine Learning, Clemson University.
 \end{itemize}
 
 \end{document}
