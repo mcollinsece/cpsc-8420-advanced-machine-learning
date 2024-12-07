@@ -213,10 +213,12 @@ The PCA visualization of the decision boundary (Figure~\ref{fig:decision-surface
 suggests that the majority of the dataset's complexity lies in higher dimensions. This highlights a limitation of using PCA for interpretability and suggests that other dimensionality reduction techniques, could provide more nuanced insights into the data's structure.
 
 \section{Conclusion}
-This study demonstrates the effectiveness of support vector machines for credit card default prediction. The findings emphasize the importance of kernel selection, with the RBF kernel offering the best performance among the four kernels evaluated. 
-Hyperparameter tuning further enhanced classification accuracy, though its impact was secondary to the choice of kernel. Future work could explore additional dimensionality reduction techniques, alternative kernel functions, and the application of SVMs to larger, more diverse datasets.
-In summary, while SVMs demonstrated some utility in this study, the results indicate that they may not be the most effective model for predicting credit card default. The modest accuracy, despite careful preprocessing and hyperparameter tuning, 
-underscores the need for exploring alternative machine learning models and techniques to better address the complexity of the dataset and improve predictive performance.
+This project reveals the limitations of support vector machines for credit card default prediction, with even the best performing RBF kernel achieving only 68.75\% accuracy. While the findings emphasize the importance of kernel selection, none of the evaluated kernels 
+achieved satisfactory performance for real-world application. Although hyperparameter tuning through grid search provided some improvements, the gains were minimal and failed to address the fundamental limitations of SVMs for this particular problem.
+
+The consistently suboptimal performance across all kernel types, ranging from 64.50\% to 68.75\% accuracy, suggests that SVMs may not be well-suited for credit card default prediction on this dataset. The complex, high-dimensional nature of the data, 
+combined with likely class overlap, poses significant challenges that SVMs struggle to overcome. Future work should focus on exploring more sophisticated machine learning approaches, such as ensemble methods or deep learning models, which may be better equipped to 
+handle the intricacies of credit default prediction. Additionally, investigating alternative feature engineering techniques and addressing the dataset's inherent complexities could prove more beneficial than further optimization of SVM models.
 
 \section*{References}
 \begin{itemize}
