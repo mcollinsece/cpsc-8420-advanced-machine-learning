@@ -23,32 +23,35 @@
 \maketitle
 
 \begin{abstract}
-This class project presents an analysis of support vector machines (SVMs) applied to the UCI Default of Credit Card Clients dataset. 
-The project explores the impacts of different kernel functions and optimization techniques on classification performance. 
-SVMs with linear, radial basis function (RBF), polynomial, and sigmoid kernels are evaluated. 
-A grid search approach is used for hyperparameter optimization, and the decision boundary is visualized using Principal Component Analysis (PCA). 
-The results are evaluated using accuracy, precision, recall, F1-score, and runtime, demonstrating the utility of SVMs for binary classification tasks on tabular data.
+This project presents an analysis of support vector machines (SVMs) applied to the UCI Default of Credit Card Clients dataset. 
+The study investigates how different kernal functions and optimization techniques influence classification performance. 
+Support Vector Machine models using linear, radial basis function (RBF), polynomial, and sigmoid kernels are evaluted. 
+A grid search is conducted for hyperparameter optimization, and PCA is utilized to visualize decision boundaries. 
+Performance metrics, including accuracy, precision, recall, F1 score, and runtime are used to evaluate the results, 
+highlighting the effectiveness of SVM's in binary classification tasks involving tabular data.
 \end{abstract}
 
 \section{Introduction}
-Support vector machines are a powerful supervised machine learning approach that have demonstrated robust performance in a wide range of classification tasks. 
-This project investigates the application of SVMs to the UCI Default of Credit Card Clients dataset, with a specific focus on assessing the impact of kernel functions 
-and optimization techniques on model performance. The study also examines how hyperparameter tuning can enhance SVM efficiency and accuracy, while PCA is employed to 
-visualize the decision boundary for improved interpretability. The primary objective of this study is to assess the efficacy of SVMs for predicting credit card default 
-and to analyze the computational trade offs associated with various kernel functions and optimization strategies.
+Support vector machines (SVMs) are a widely used supervised machine learning approach, recognized for their strong performance 
+in diverse classification tasks. This project explores the application of Support Vector Machines to the UCI Default of Credit Card 
+Clients dataset, focusing on the role of kernal functions and optimization techniques in shaping model performance. Additionally, 
+hyperparameter tuning is investigated as a means of improving both effiency and accuracy. To improve interpretability, Principal Component Analysis (PCA) 
+is used to visualize the decision boundries. The main goal is to evaluate the effectiveness of SVM's for predicting credit card default and to analyze the 
+computational trade-offs associated with various kernel functions and optimization strategies. Results are evaluated using accuracy, recall, precision, and the F1-score.
+
 
 
 \section{Dataset}
 
 The UCI Default of Credit Card Clients dataset is a multivariate dataset containing data from 30,000 credit card holders in Taiwan. 
-The dataset is primarily designed for binary classification tasks, specifically predicting whether a client would default on their next month's payment. 
-It includes 23 features, which consist of demographic variables such as age, sex, education, and marital status, along with financial metrics like credit limits, 
+It is primarily designed for binary classification tasks, specifically predicting whether a client would default on their next months payment. 
+The dataset includes 23 features, which consist of demographic variables such as age, sex, education, and marital status, along with financial metrics like credit limits, 
 historical bill statements, and repayment amounts. The target variable is binary, indicating whether a client defaulted (1) or did not default (0) on their credit card payment. 
 
-The dataset includes a mix of categorical and numerical variables. Key variables include repayment statuses (\texttt{PAY\_0} through \texttt{PAY\_6}), 
-historical bill amounts (\texttt{BILL\_AMT1} through \texttt{BILL\_AMT6}), and historical repayment amounts (\texttt{PAY\_AMT1} through \texttt{PAY\_AMT6}). 
+The dataset includes a mix of categorical and numerical variables. Important variables include repayment statuses (\texttt{PAY\_0} to \texttt{PAY\_6}), 
+historical bill amounts (\texttt{BILL\_AMT1} through \texttt{BILL\_AMT6}), and historical repayment amounts (\texttt{PAY\_AMT1} to \texttt{PAY\_AMT6}). 
 Additionally, demographic variables such as \texttt{SEX}, \texttt{EDUCATION}, and \texttt{MARRIAGE} provide insights into customer profiles. Table~\ref{variables_table} 
-summarizes the features included in the dataset.
+summarizes the key features in the dataset.
 
 \begin{table}[H]
 \centering
@@ -57,27 +60,28 @@ summarizes the features included in the dataset.
 \begin{tabular}{@{}lcll@{}}
 \toprule
 \textbf{Variable Name} & \textbf{Type} & \textbf{Description}                  & \textbf{Units}       \\ \midrule
-SEX                    & Categorical   & Gender                                & 1 = Male, 2 = Female \\
-EDUCATION              & Categorical   & Education level                       & 1 = Graduate, etc.   \\
-MARRIAGE               & Categorical   & Marital status                        & 1 = Married, etc.    \\
-BILL\_AMT1-6           & Numerical     & Monthly bill amounts (6 months)       & NT Dollars           \\
-PAY\_AMT1-6            & Numerical     & Historical repayment amounts (6 months) & NT Dollars         \\
-PAY\_0-6               & Categorical   & Repayment status (-2: advance payment) & Discrete values      \\
+SEX                    & Categorical   & Gender                                & 1 = Male, 2 = Female \\ 
+EDUCATION              & Categorical   & Education level                       & 1 = Graduate, etc.   \\ 
+MARRIAGE               & Categorical   & Marital status                        & 1 = Married, etc.    \\ 
+BILL\_AMT1-6           & Numerical     & Monthly bill amounts (6 months)       & NT Dollars           \\ 
+PAY\_AMT1-6            & Numerical     & Historical repayment amounts (6 months) & NT Dollars         \\ 
+PAY\_0-6               & Categorical   & Repayment status (-2: advance payment) & Discrete values      \\ 
 DEFAULT (Target)       & Binary        & Default status for the next month     & 0 = No, 1 = Yes      \\ \bottomrule
 \end{tabular}
 \end{table}
 
-To prepare the dataset for modeling, extensive preprocessing was conducted. Several variables, such as \texttt{SEX}, \texttt{EDUCATION}, \texttt{MARRIAGE}, 
-and repayment statuses (\texttt{PAY\_0} through \texttt{PAY\_6}), were categorical in nature. Since support vector machines require numerical input, 
-these categorical variables were transformed into one hot encoded binary variables. This encoding ensured that each category was treated as an independent feature, avoiding implicit ordinal assumptions. 
-Furthermore, the dataset exhibited significant class imbalance, with the majority of clients not defaulting on their payments. To address this imbalance, the majority class (non-default clients) 
-was downsampled to create a balanced dataset, ensuring that the model learned patterns equally well from both defaulting and non-defaulting clients.
+To prepare the dataset for modeling, several preprocessing steps were applied. Variables like \texttt{SEX}, \texttt{EDUCATION}, \texttt{MARRIAGE}, 
+and repayment statuses (\texttt{PAY\_0} to \texttt{PAY\_6}) were categorical. Since SVMs require numerical input, these categorical variables 
+were transformed into one-hot encoded binary variables. This ensured that each category was treated as an independent feature, avoiding any implicit ordinal assumptions. 
+Additionally, the dataset exhibited significant class imbalance, as most clients did not default on their payments. To address this, the majority class (non-default clients) 
+was downsampled to create a balanced dataset. This ensured the model learned patterns equally well from defaulting and non-defaulting clients.
 
-Another essential preprocessing step involved standardizing numerical features, such as bill amounts and repayment amounts. These features had varying scales, with some variables measured in monetary units and others as categorical values. 
-Without standardization, features with larger magnitudes could disproportionately influence the model. Therefore, all continuous features were scaled to have a mean of zero and a standard deviation of one, ensuring fair contribution from each variable.
+Another essential step was standardizing numerical features like bill amounts and repayment amounts. These features had varying scales, with some measured in monetary units and others being categorical. 
+Without standardization, features with larger magnitudes could disproportionately impact the model. Thus, all continuous features were scaled to have a mean of zero and a standard deviation of one, 
+ensuring fair contribution from all variables.
 
-The preprocessing steps of one hot encoding, downsampling, and standardization were necessary to ensure that the dataset was compatible with support vector machines and capable of producing meaningful predictions. 
-These transformations addressed the challenges posed by mixed feature types, class imbalance, and variable scaling, ultimately improving the efficiency and accuracy of the machine learning models applied in this study.
+The preprocessing steps of one-hot encoding, downsampling, and standardization were essential to making the dataset compatible with SVMs and producing reliable predictions. 
+These transformations addressed challenges posed by mixed feature types, class imbalance, and variable scaling, ultimately improving the efficiency and accuracy of the machine learning models used in this study.
 
 
 \section{Methodology}
@@ -199,26 +203,29 @@ Sigmoid         & 0.6450            & 0.7007             & 0.5124          & 0.5
 \end{figure}
 
 \section{Discussion}
-The results highlight the importance of kernel selection in Support Vector Machines (SVMs) for binary classification tasks. Among the evaluated kernels, the radial basis function (RBF) kernel emerged as the 
-best performing option, achieving an accuracy of 68.75\%. This performance underscores the RBF kernel's strength in mapping data into higher-dimensional spaces, enabling it to capture nonlinear decision boundaries. 
-However, the achieved accuracy is relatively modest, raising questions about the suitability of SVMs for this particular dataset. While the polynomial kernel showed competitive performance with an accuracy of 67.00\%, 
-its sensitivity to parameter tuning limited its robustness. The linear kernel underperformed, achieving an accuracy of only 65.25\%, which can be attributed to its inability to handle the nonlinear structure of the data. 
-The sigmoid kernel, with its complex parameterization, struggled to converge effectively and yielded the lowest accuracy of 64.50\%.
 
-The relatively low accuracy across all kernels suggests that SVMs, while powerful, may not be the optimal model for this task. The imbalanced and high-dimensional nature of the dataset likely contributed to the suboptimal performance. 
-Although hyperparameter tuning via grid search improved the models, as evidenced by the enhanced confusion matrix after optimization (Figure~\ref{fig:confusion-post-grid}), the gains were incremental and insufficient to achieve high accuracy. 
-This indicates that the inherent characteristics of the dataset—such as overlapping class distributions and complex relationships among features—pose challenges that SVMs alone may not effectively address.
+The results highlight the importance of kernel selection in SVMs for binary classification tasks. Among the evaluated kernels, the radial basis function (RBF) kernel stood out as the 
+best performing option, achieving an accuracy of 68.75\%. This performance underscores the RBF kernel's strength in mapping data into higher-dimensional spaces, allowing it to capture nonlinear decision boundaries. 
+However, the achieved accuracy remains relatively modest, raising questions about whether SVMs are the most suitable choice for this dataset. While the polynomial kernel showed comparable performance with an accuracy of 67.00\%, 
+its sensitivity to parameter tuning limited its robustness. In contrast, the linear kernel underperformed, achieving an accuracy of only 65.25\%, which likely results from its inability to handle the nonlinear structure in the data. 
+The sigmoid kernel, with its more complex parameterization, struggled to converge effectively and resulted in the lowest accuracy of 64.50\%.
 
-The PCA visualization of the decision boundary (Figure~\ref{fig:decision-surface}) provided insights into the separability of the classes, but the limited explained variance from the first two principal components (Figure~\ref{fig:scree-plot}) 
-suggests that the majority of the dataset's complexity lies in higher dimensions. This highlights a limitation of using PCA for interpretability and suggests that other dimensionality reduction techniques, could provide more nuanced insights into the data's structure.
+The relatively low accuracy across all kernels suggests that SVMs, while effective in many applications, may not be the optimal model for this task. The imbalanced and high-dimensional nature of the dataset likely contributed to these results. 
+Although hyperparameter tuning through grid search improved the models as seen in the enhanced confusion matrix after optimization (Figure~\ref{fig:confusion-post-grid})—the improvements were incremental and insufficient to achieve significant gains in accuracy. 
+This points to challenges inherent in the dataset, such as overlapping class distributions and complex feature relationships, that SVMs alone might not effectively address.
+
+The PCA visualization of the decision boundary (Figure~\ref{fig:decision-surface}) offered insights into the separability of the classes. However, the limited explained variance from the first two principal components (Figure~\ref{fig:scree-plot}) 
+suggests that most of the dataset's complexity lies in higher dimensions. This indicates a limitation of PCA for interpretability and hints that other dimensionality reduction techniques could provide more nuanced insights into the data's structure.
 
 \section{Conclusion}
-This project reveals the limitations of support vector machines for credit card default prediction, with even the best performing RBF kernel achieving only 68.75\% accuracy. While the findings emphasize the importance of kernel selection, none of the evaluated kernels 
-achieved satisfactory performance for real-world application. Although hyperparameter tuning through grid search provided some improvements, the gains were minimal and failed to address the fundamental limitations of SVMs for this particular problem.
 
-The consistently suboptimal performance across all kernel types, ranging from 64.50\% to 68.75\% accuracy, suggests that SVMs may not be well-suited for credit card default prediction on this dataset. The complex, high-dimensional nature of the data, 
-combined with likely class overlap, poses significant challenges that SVMs struggle to overcome. Future work should focus on exploring more sophisticated machine learning approaches, such as ensemble methods or deep learning models, which may be better equipped to 
-handle the intricacies of credit default prediction. Additionally, investigating alternative feature engineering techniques and addressing the dataset's inherent complexities could prove more beneficial than further optimization of SVM models.
+This project demonstrates the limitations of SVMs for predicting credit card default, with even the best performing RBF kernel achieving only 68.75\% accuracy. While the findings emphasize the importance of kernel selection, none of the tested kernels 
+achieved performance levels that would be satisfactory for real-world application. Although hyperparameter tuning via grid search led to minor improvements, the gains were not substantial enough to overcome the inherent limitations of SVMs for this specific problem.
+
+The suboptimal performance across all kernel types, ranging from 64.50\% to 68.75\% accuracy, indicates that SVMs may not be well-suited for credit card default prediction on this dataset. The complex, high-dimensional nature of the data, 
+combined with likely class overlap, presents significant challenges that SVMs struggle to address. Future work should focus on exploring more advanced machine learning techniques, such as ensemble methods or deep learning models, which could be better equipped to 
+handle the complexities of credit default prediction. Additionally, investigating alternative feature engineering techniques and addressing the dataset's underlying issues may yield greater improvements than further optimizing SVM models.
+
 
 \section*{References}
 \begin{itemize}
