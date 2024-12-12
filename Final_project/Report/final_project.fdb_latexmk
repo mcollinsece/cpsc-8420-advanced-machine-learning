@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1733715702.31022 "e:/CPSC 8420 Advances Machine Learning/Final_project/Report/final_project.tex" "final_project.pdf" "final_project" 1733715703.91889 0
+["pdflatex"] 1734028681.00979 "e:/CPSC 8420 Advances Machine Learning/Final_project/Report/final_project.tex" "final_project.pdf" "final_project" 1734028682.90228 0
   "../figures/confusion_matrix_post_gridSearch.png" 1733537771 68001 483580886df8fdb49fa4605195e9bf82 ""
   "../figures/confusion_matrix_pre_gridSearch.png" 1733537762 66646 d3dea9f338102cbbf2cfd6a38fc76538 ""
   "../figures/decision_surface_pca.png" 1733537786 1130909 7fdd143a0b3fa1be895dabc26950a016 ""
@@ -129,10 +129,10 @@
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/units/nicefrac.sty" 1469029150 4163 0462ee5ab265cf59dc15a41a3b883101 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/url/url.sty" 1388490452 12796 8edb7d69a20b857904dd0ea757c14ec9 ""
   "C:/Users/Matthew/AppData/Local/Programs/MiKTeX/tex/latex/xcolor/xcolor.sty" 1700127522 55487 80a65caedd3722f4c20a14a69e785d8f ""
-  "e:/CPSC 8420 Advances Machine Learning/Final_project/Report/final_project.tex" 1733715701 16369 94acdacd99b5edd9733841d70bf90772 ""
-  "final_project.aux" 1733715703 2237 755e5f195069bde52433941f6e211e8d "pdflatex"
-  "final_project.out" 1733715703 543 b274e20a0a16a162e30c7934ce931711 "pdflatex"
-  "final_project.tex" 1733715701 16369 94acdacd99b5edd9733841d70bf90772 ""
+  "e:/CPSC 8420 Advances Machine Learning/Final_project/Report/final_project.tex" 1734028679 16367 4d525a5ea6461f1d6cf43096c0c9c1e6 ""
+  "final_project.aux" 1734028682 2237 755e5f195069bde52433941f6e211e8d "pdflatex"
+  "final_project.out" 1734028682 543 b274e20a0a16a162e30c7934ce931711 "pdflatex"
+  "final_project.tex" 1734028679 16367 4d525a5ea6461f1d6cf43096c0c9c1e6 ""
   "neurips_2024.sty" 1733539519 11662 882c9185c56d568626ca6a0d1d4134a9 ""
   (generated)
   "final_project.aux"
